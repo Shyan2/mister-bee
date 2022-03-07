@@ -9,7 +9,7 @@ export const useData = () => {
 
 	useEffect(() => {
 		const row = (d) => {
-			d['Year'] = +d['Year'];
+			d['Year'] = d['Year'];
 			d['Facade'] = +d['Facade'];
 			d['TB B2-L3 (+Gatehouse)'] = +d['TB B2-L3 (+Gatehouse)'];
 			d['NC (+Gatehouse+NLB)'] = +d['NC (+Gatehouse+NLB)'];

@@ -1,8 +1,9 @@
 import React from 'react';
+import { Grid, Container } from '@mui/material';
+
 import PieChart from './PieChart/PieChart';
 import BarChart from './BarChart/BarChart';
-
-import { Grid, Container } from '@mui/material';
+import Gauge from './Gauge/Gauge';
 
 const Dashboard = () => {
 	return (
@@ -10,8 +11,11 @@ const Dashboard = () => {
 			<Grid item sm={12} md={12} lg={6}>
 				<PieChart />
 			</Grid>
-			<Grid item sm={12} md={12} lg={6}>
+			<Grid item sm={12} md={12} lg={8}>
 				<BarChart />
+			</Grid>
+			<Grid item sm={12} md={12} lg={8}>
+				<Gauge />
 			</Grid>
 		</Grid>
 	);

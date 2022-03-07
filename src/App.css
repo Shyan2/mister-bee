@@ -30,3 +30,19 @@ body {
 	padding: inherit;
 	font-size: inherit;
 }
+
+.mark {
+	fill: #137b80;
+}
+
+.map-marks .graticules,
+.tick line {
+	fill: none;
+	stroke: #dadada;
+}
+
+.axis-label {
+	font-size: 1.5em;
+	fill: #635f5d;
+	color: #635f5d;
+}
