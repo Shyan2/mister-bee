@@ -5,13 +5,14 @@ import { useData } from './useData';
 
 import { AxisBottom } from './AxisBottom';
 import { AxisLeft } from './AxisLeft';
-import { Marks } from './Marks';
 import { MultiMarks } from './MultiMarks';
 import { Legend } from './Legend';
 
+import { Typography } from '@mui/material';
+
 import * as d3 from 'd3';
 
-const width = 960;
+const width = 900;
 const height = 500;
 const margin = {
 	top: 30,
@@ -25,9 +26,9 @@ const yAxisLabelOffset = 60;
 const BarChart = () => {
 	const data = useData();
 
-	// useEffect(() => {
-	// 	console.log(data);
-	// }, [data]);
+	useEffect(() => {
+		console.log(data);
+	}, [data]);
 
 	if (!data) {
 		return <pre>Loading ... </pre>;
@@ -48,7 +49,7 @@ const BarChart = () => {
 	// X axis
 	const x = scaleBand().domain(groups).range([0, innerWidth]).padding([0.5]);
 
-	console.log(x.domain());
+	// console.log(x.domain());
 
 	//Y axis
 	const y = scaleLinear()
@@ -85,7 +86,9 @@ const BarChart = () => {
 					<Marks innerHeight={innerHeight} data={data} xScale={xScale} yScale={yScale} />
 				</g>
 			</svg> */}
-
+			<Typography sx={{ mt: 2 }} variant="h1" align="center">
+				TP6A_鋼構進場數量
+			</Typography>
 			<svg width={width} height={height}>
 				<rect width={width} height={height} fill="#f9f9f9" />
 				<g transform={`translate(${margin.left},${margin.top})`}>
@@ -113,7 +116,7 @@ const BarChart = () => {
 						color={color}
 					/>
 				</g>
-				<g transform={`translate(${innerWidth}, 80)`}>
+				<g transform={`translate(${innerWidth - 80} , 80)`}>
 					<text x={35} y={-25} textAnchor="middle">
 						Colour Legend
 					</text>

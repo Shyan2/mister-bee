@@ -3,13 +3,23 @@ import { useData } from './useData';
 
 import Pie from './Pie';
 
-const width = 960;
-const height = 600;
-const innerRadius = 150;
-const outerRadius = 280;
+const width = 900;
+const height = 650;
+const innerRadius = 100;
+const outerRadius = 200;
+
+const margin = {
+	top: 100,
+	right: 50,
+	bottom: 70,
+	left: 100,
+};
 
 const PieChart = () => {
 	const data = useData();
+
+	const innerHeight = height - margin.top - margin.bottom;
+	const innerWidth = width - margin.left - margin.right;
 
 	useEffect(() => {
 		console.log(data);
@@ -20,7 +30,15 @@ const PieChart = () => {
 	}
 	return (
 		<>
-			<Pie data={data} width={width} height={height} innerRadius={innerRadius} outerRadius={outerRadius} />
+			<Pie
+				data={data}
+				width={innerWidth}
+				height={innerHeight}
+				innerWidth={innerWidth}
+				innerHeight={innerHeight}
+				innerRadius={innerRadius}
+				outerRadius={outerRadius}
+			/>
 		</>
 	);
 };
