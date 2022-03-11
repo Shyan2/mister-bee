@@ -11,7 +11,7 @@ const Dashboard = () => {
 	const [pieChart, setPieChart] = useState(1);
 	const [barChart, setBarChart] = useState(1);
 	const [progressCard, setProgressCard] = useState(1);
-	const [stackedBarChart, setStackedBarChart] = useState(1);
+	const [stackedBarChart, setStackedBarChart] = useState(false);
 
 	return (
 		<>

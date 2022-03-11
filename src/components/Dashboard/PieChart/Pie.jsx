@@ -44,6 +44,7 @@ const Pie = ({ data, innerRadius, outerRadius, innerWidth, innerHeight }) => {
 			<Typography variant="h2" align="center">
 				【計劃經費956.81億】
 			</Typography>
+
 			<svg
 				width={innerWidth}
 				height={innerHeight}
