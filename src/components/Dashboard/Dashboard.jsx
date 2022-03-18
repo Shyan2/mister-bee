@@ -5,13 +5,15 @@ import PieChart from './PieChart/PieChart';
 import BarChart from './BarChart/BarChart';
 import ProgressCard from './ProgressCard/ProgressCard';
 import StackedBarChart from './StackedBarChart/StackedBarChart';
+import SendReceieveDocs from './SendReceieveDocs/SendReceieveDocs';
 import Selection from './Selection';
 
 const Dashboard = () => {
-	const [pieChart, setPieChart] = useState(1);
-	const [barChart, setBarChart] = useState(1);
-	const [progressCard, setProgressCard] = useState(1);
+	const [pieChart, setPieChart] = useState(true);
+	const [barChart, setBarChart] = useState(false);
+	const [progressCard, setProgressCard] = useState(false);
 	const [stackedBarChart, setStackedBarChart] = useState(false);
+	const [sendReceieveDocs, setSendReceiveDocs] = useState(false);
 
 	return (
 		<>
@@ -20,10 +22,12 @@ const Dashboard = () => {
 				barChart={barChart}
 				progressCard={progressCard}
 				stackedBarChart={stackedBarChart}
+				sendReceieveDocs={sendReceieveDocs}
 				setPieChart={setPieChart}
 				setBarChart={setBarChart}
 				setProgressCard={setProgressCard}
 				setStackedBarChart={setStackedBarChart}
+				setSendReceiveDocs={setSendReceiveDocs}
 			/>
 			<Grid container>
 				{pieChart && (
@@ -44,6 +48,11 @@ const Dashboard = () => {
 				{stackedBarChart && (
 					<Grid item sm={12} md={12} lg={6}>
 						<StackedBarChart />
+					</Grid>
+				)}
+				{sendReceieveDocs && (
+					<Grid item sm={12} md={12} lg={6}>
+						<SendReceieveDocs />
 					</Grid>
 				)}
 			</Grid>

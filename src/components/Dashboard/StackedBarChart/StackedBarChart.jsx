@@ -4,7 +4,7 @@ import { useEffect } from 'react';
 import { AxisBottom } from './AxisBottom';
 import { AxisLeft } from './AxisLeft';
 import { StackedMarks } from './StackedMarks';
-import { useReceiveData } from './useReceiveData';
+import { useData } from './useData';
 import { Legend } from './Legend';
 
 import { scaleBand, scaleLinear, max, scaleOrdinal, map, axisLeft, axisBottom } from 'd3';
@@ -13,7 +13,7 @@ import * as d3 from 'd3';
 import { Typography } from '@mui/material';
 
 const width = 900;
-const height = 650;
+const height = 500;
 const margin = {
 	top: 30,
 	right: 30,
@@ -21,10 +21,10 @@ const margin = {
 	left: 90,
 };
 const xAxisLabelOffset = 40;
-const yAxisLabelOffset = 60;
+const yAxisLabelOffset = 40;
 
 const StackedBarChart = () => {
-	const data = useReceiveData();
+	const data = useData();
 
 	useEffect(() => {
 		if (data) {
@@ -50,24 +50,29 @@ const StackedBarChart = () => {
 
 	const y = scaleLinear().domain([0, 120]).range([innerHeight, 0]).nice();
 
-	console.log(subgroups);
-
 	const color = scaleOrdinal()
 		.domain(subgroups)
-		.range(['#f9423a', '#d9d9d6', '#343e48', '#efecea', '#d8e6f0', '#1e252b']);
-	console.log(color.domain());
+		// .range(['#f9423a', '#d9d9d6', '#343e48', '#efecea', '#d8e6f0', '#1e252b', '#5B6BAA', '#AEE233']);
+		.range(d3.schemeSet3);
 
 	const stackedData = d3.stack().keys(subgroups)(data);
 
 	return (
 		<>
 			<Typography sx={{ mt: 2 }} variant="h1" align="center">
-				收發文
+				收發文數量
 			</Typography>
 			<svg width={width} height={height}>
 				<rect width={width} height={height} fill="#f9f9f9" />
 				<g transform={`translate(${margin.left},${margin.top})`}>
-					<g transform={`translate(${innerWidth - 80}, 80)`}>
+					<text
+						className="axis-label"
+						textAnchor="middle"
+						transform={`translate(${-yAxisLabelOffset},${innerHeight / 2}) rotate(-90)`}
+					>
+						數量
+					</text>
+					<g transform={`translate(${innerWidth - 300}, 80)`}>
 						<text x={35} y={-25} textAnchor="middle">
 							Colour Legend
 						</text>
@@ -76,7 +81,14 @@ const StackedBarChart = () => {
 					<AxisBottom xScale={x} innerHeight={innerHeight} />
 
 					<AxisLeft yScale={y} innerWidth={innerWidth} />
-					<StackedMarks innerHeight={innerHeight} data={stackedData} x={x} y={y} subgroups={subgroups} color={color} />
+					<StackedMarks
+						innerHeight={innerHeight}
+						data={stackedData}
+						x={x}
+						y={y}
+						subgroups={subgroups}
+						colorScale={color}
+					/>
 				</g>
 			</svg>
 		</>

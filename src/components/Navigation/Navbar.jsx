@@ -102,7 +102,7 @@ const Navbar = () => {
 							sx={{ color: '#f2f2f2', textDecoration: 'none' }}
 							// sx={{ flexGrow: 1, color: '#f2f2f2', textDecoration: 'none' }}
 						>
-							BIM Platform
+							VDC Development Platform
 						</Typography>
 					</Box>
 
@@ -110,7 +110,7 @@ const Navbar = () => {
 						<Box sx={{ display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
 							<img alt="user-pic" height="30" width="30" src={user.picture} />
 							&nbsp; &nbsp;
-							{user.firstName + ' ' + user.lastName}
+							<Typography>{user.firstName + ' ' + user.lastName}</Typography>
 							&nbsp;
 							<Button
 								color="inherit"
@@ -119,12 +119,12 @@ const Navbar = () => {
 									logOutAutodesk();
 								}}
 							>
-								Logout
+								<Typography>Logout</Typography>
 							</Button>
 						</Box>
 					) : (
 						<Button color="inherit" href={loginLink}>
-							Login
+							<Typography>Login</Typography>
 						</Button>
 					)}
 				</Toolbar>

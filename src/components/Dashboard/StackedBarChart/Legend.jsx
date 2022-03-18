@@ -1,7 +1,8 @@
 export const Legend = ({ colorScale, tickSpacing = 20, tickSize = 10, tickTextOffset = 15 }) => {
 	const returnObject = colorScale.domain().map((domainValue, i) => {
-		console.log(domainValue);
 		// const returnObject = colorScale.map((domainValue, i) => {
+		// console.log(domainValue);
+
 		return (
 			<g className="tick" key={domainValue} transform={`translate(0,${i * tickSpacing})`}>
 				<circle fill={colorScale(domainValue)} r={tickSize} />

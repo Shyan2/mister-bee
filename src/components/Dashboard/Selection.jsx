@@ -9,10 +9,12 @@ const Selection = ({
 	barChart,
 	progressCard,
 	stackedBarChart,
+	sendReceieveDocs,
 	setPieChart,
 	setBarChart,
 	setProgressCard,
 	setStackedBarChart,
+	setSendReceiveDocs,
 }) => {
 	const handlePieChartChange = (event) => {
 		setPieChart(event.target.checked);
@@ -25,6 +27,9 @@ const Selection = ({
 	};
 	const handleStackedBarChartChange = (event) => {
 		setStackedBarChart(event.target.checked);
+	};
+	const handleSendReceieveDocsChange = (event) => {
+		setSendReceiveDocs(event.target.checked);
 	};
 
 	return (
@@ -48,6 +53,11 @@ const Selection = ({
 				<FormControlLabel
 					key={'stackedbarchart'}
 					control={<Switch checked={stackedBarChart} onChange={handleStackedBarChartChange} />}
+					label="Stacked Chart"
+				/>
+				<FormControlLabel
+					key={'sendReceieveDocs'}
+					control={<Switch checked={sendReceieveDocs} onChange={handleSendReceieveDocsChange} />}
 					label="收發文"
 				/>
 			</FormGroup>
