@@ -14,7 +14,7 @@ import ClearIcon from '@mui/icons-material/Clear';
 import SearchIcon from '@mui/icons-material/Search';
 import CompareIcon from '@mui/icons-material/Compare';
 
-import { localizedTextsMap } from './localizedTextMap';
+import { localizedTextsMap } from '../../localizedTextMap';
 import PreviewIcon from '@mui/icons-material/Preview';
 import LinearProgress from '@mui/material/LinearProgress';
 

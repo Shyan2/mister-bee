@@ -46,3 +46,8 @@ body {
 	fill: #635f5d;
 	color: #635f5d;
 }
+
+.circlePack:hover {
+	stroke-width: 3px !important;
+	opacity: 1 !important;
+}

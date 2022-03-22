@@ -9,11 +9,11 @@ import SendReceieveDocs from './SendReceieveDocs/SendReceieveDocs';
 import Selection from './Selection';
 
 const Dashboard = () => {
-	const [pieChart, setPieChart] = useState(true);
+	const [pieChart, setPieChart] = useState(false);
 	const [barChart, setBarChart] = useState(false);
 	const [progressCard, setProgressCard] = useState(false);
 	const [stackedBarChart, setStackedBarChart] = useState(false);
-	const [sendReceieveDocs, setSendReceiveDocs] = useState(false);
+	const [sendReceieveDocs, setSendReceiveDocs] = useState(true);
 
 	return (
 		<>
@@ -51,7 +51,7 @@ const Dashboard = () => {
 					</Grid>
 				)}
 				{sendReceieveDocs && (
-					<Grid item sm={12} md={12} lg={6}>
+					<Grid item sm={12}>
 						<SendReceieveDocs />
 					</Grid>
 				)}

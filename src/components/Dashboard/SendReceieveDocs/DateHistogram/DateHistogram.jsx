@@ -84,23 +84,25 @@ const DateHistogram = ({ data, width, height, xValue, setBrushExtent }) => {
 
 	return (
 		<>
-			<rect width={width} height={height} fill="white" />
-			<g transform={`translate(${margin.left},${margin.top})`}>
-				<AxisBottom xScale={xScale} innerHeight={innerHeight} tickFormat={xAxisTickFormat} tickOffset={5} />
-				{/* <text
+			{/* <rect width={width} height={height} fill="white" /> */}
+			<svg width={width} height={height}>
+				<g transform={`translate(${margin.left},${margin.top})`}>
+					<AxisBottom xScale={xScale} innerHeight={innerHeight} tickFormat={xAxisTickFormat} tickOffset={5} />
+					{/* <text
 					className="axis-label"
 					textAnchor="middle"
 					transform={`translate(${-yAxisLabelOffset},${innerHeight / 2}) rotate(-90)`}
 				>
 					{yAxisLabel}
 				</text> */}
-				<AxisLeft yScale={yScale} innerWidth={innerWidth} tickOffset={5} />
-				<text className="axis-label" x={innerWidth / 2} y={innerHeight + xAxisLabelOffset} textAnchor="middle">
-					{xAxisLabel}
-				</text>
-				<Marks data={binnedData} xScale={xScale} yScale={yScale} innerHeight={innerHeight} />
-				<g ref={brushRef} />
-			</g>
+					<AxisLeft yScale={yScale} innerWidth={innerWidth} tickOffset={5} />
+					<text className="axis-label" x={innerWidth / 2} y={innerHeight + xAxisLabelOffset} textAnchor="middle">
+						{xAxisLabel}
+					</text>
+					<Marks data={binnedData} xScale={xScale} yScale={yScale} innerHeight={innerHeight} />
+					<g ref={brushRef} />
+				</g>
+			</svg>
 		</>
 	);
 };
