@@ -1,5 +1,5 @@
 import { useState, useEffect, useContext } from 'react';
-import { ViewingItemContext } from './Context';
+// import { SelectedObjectContext } from './Context';
 import { Box, TextField, IconButton } from '@mui/material';
 import {
 	DataGrid,
@@ -17,6 +17,7 @@ import CompareIcon from '@mui/icons-material/Compare';
 import { localizedTextsMap } from '../../localizedTextMap';
 import PreviewIcon from '@mui/icons-material/Preview';
 import LinearProgress from '@mui/material/LinearProgress';
+import { ContentCutOutlined, ThreeDRotation } from '@mui/icons-material';
 
 function CustomLoadingOverlay() {
 	return (
@@ -98,33 +99,51 @@ function QuickSearchToolbar(props) {
 	);
 }
 
-const FileVersions = ({ versionList, isLoading }) => {
-	const { viewingItem, setViewingItem } = useContext(ViewingItemContext);
+const PropertiesTable = ({ items, isLoading }) => {
+	console.log(items);
+	// const { selectedObject, setSelectedObject } = useContext(SelectedObjectContext);
 
 	const [columns] = useState([
 		{
-			field: 'version',
-			headerName: '版次',
-			minWidth: 100,
-			headerClassName: 'header-theme',
-			type: 'number',
-		},
-		{
-			field: 'fileSize',
-			headerName: '大小',
+			field: 'svf2Id',
+			headerName: 'ID',
 			width: 150,
 			headerClassName: 'header-theme',
-			hide: true,
 		},
 		{
-			field: 'lastUpdated',
-			headerName: '最後更新',
-			width: 200,
+			field: 'name',
+			headerName: 'Name',
+			flex: 1,
 			headerClassName: 'header-theme',
 		},
 		{
-			field: 'updatedBy',
-			headerName: '更新使用者',
+			field: 'category',
+			headerName: 'Category',
+			flex: 1,
+			headerClassName: 'header-theme',
+		},
+
+		{
+			field: 'materialOne',
+			headerName: '類別',
+			flex: 1,
+			headerClassName: 'header-theme',
+		},
+		{
+			field: 'materialThree',
+			headerName: 'Material',
+			flex: 1,
+			headerClassName: 'header-theme',
+		},
+		{
+			field: 'revitCategory',
+			headerName: 'Revit Category',
+			flex: 1,
+			headerClassName: 'header-theme',
+		},
+		{
+			field: 'revitFamily',
+			headerName: 'Revit Family',
 			flex: 1,
 			headerClassName: 'header-theme',
 		},
@@ -142,10 +161,14 @@ const FileVersions = ({ versionList, isLoading }) => {
 							size="small"
 							style={{ marginLeft: 16 }}
 							onClick={() => {
-								setViewingItem({
-									id: params.id,
-									name: params.row.name,
-								});
+								console.log(params);
+								window.NOP_VIEWER.isolate(params.id);
+								window.NOP_VIEWER.select(params.id);
+
+								// window.NOP_VIEWER.navigation.FIT_TO_VIEW_VERTICAL_OFFSET = 0.2;
+								// window.NOP_VIEWER.navigation.FIT_TO_VIEW_HORIZONTAL_MARGIN = 0.2;
+								console.log(window.NOP_VIEWER.fitToView);
+								window.NOP_VIEWER.fitToView(params.id);
 							}}
 						>
 							{/* 預覽 */}
@@ -158,47 +181,34 @@ const FileVersions = ({ versionList, isLoading }) => {
 	]);
 
 	const [searchText, setSearchText] = useState('');
-	const [rows, setRows] = useState([]);
-
-	useEffect(() => {
-		let tempVersionList = [];
-		console.log(versionList);
-		versionList.forEach((versionItem) => {
-			const splitString = versionItem.name.split(' ');
-			tempVersionList.push({
-				id: versionItem.id,
-				name: versionItem.name,
-				version: parseInt(splitString[0].slice(1, -1)),
-				lastUpdated: splitString[1] + ' ' + splitString[2],
-				updatedBy: splitString[splitString.length - 2] + ' ' + splitString[splitString.length - 1],
-			});
-		});
-
-		setRows(tempVersionList);
-	}, [versionList]);
+	const [rows, setRows] = useState(items);
 
 	const [sortModel, setSortModel] = useState([
 		{
-			field: 'version',
-			sort: 'desc',
+			field: 'lastUpdated',
+			sort: 'asc',
 		},
 	]);
-	const searchFilter = ({ name, version, filePath, fileSize, lastUpdated }) => ({
+	const searchFilter = ({ name, category, revitCategory, revitFamily }) => ({
 		name,
-		version,
-		filePath,
-		lastUpdated,
+		category,
+		revitCategory,
+		revitFamily,
 	});
 	const requestSearch = (searchValue) => {
 		setSearchText(searchValue);
 		const searchRegex = new RegExp(escapeRegExp(searchValue), 'i');
-		const filteredRows = versionList.filter((row) => {
+		const filteredRows = items.filter((row) => {
 			return Object.keys(searchFilter(row)).some((field) => {
 				return searchRegex.test(row[field].toString());
 			});
 		});
 		setRows(filteredRows);
 	};
+
+	useEffect(() => {
+		setRows(items);
+	}, [items]);
 
 	return (
 		<Box
@@ -212,6 +222,7 @@ const FileVersions = ({ versionList, isLoading }) => {
 			}}
 		>
 			<DataGrid
+				getRowId={(row) => row.svf2Id}
 				aria-label="File Data Grid"
 				localeText={localizedTextsMap}
 				// localeText={zhCN.components.MuiDataGrid.defaultProps.localeText}
@@ -234,4 +245,4 @@ const FileVersions = ({ versionList, isLoading }) => {
 	);
 };
 
-export default FileVersions;
+export default PropertiesTable;

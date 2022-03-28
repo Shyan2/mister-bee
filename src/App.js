@@ -12,6 +12,7 @@ import DesignManagement from './components/DesignManagement/DesignManagement';
 import KnowledgeBase from './components/KnowledgeBase/KnowledgeBase';
 import BIM360Tree from './components/BIM360Tree';
 import Dashboard from './components/Dashboard/Dashboard';
+import ModelProperties from './components/ModelProperties/ModelProperties';
 import NotLoggedIn from './components/Error/NotLoggedIn';
 
 import './App.css';
@@ -33,6 +34,7 @@ const App = () => {
 									<Route path="/knowledgeBase" element={<KnowledgeBase />} />
 									<Route path="/bim360tree" element={<BIM360Tree />} />
 									<Route path="/dashboard" element={<Dashboard />} />
+									<Route path="/modelproperties" element={<ModelProperties />} />
 								</>
 							)}
 							<Route path="/" element={<Home />} />

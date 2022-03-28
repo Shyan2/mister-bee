@@ -10,6 +10,7 @@ import FolderIcon from '@mui/icons-material/Folder';
 import SupervisorAccountIcon from '@mui/icons-material/SupervisorAccount';
 import SettingsIcon from '@mui/icons-material/Settings';
 import DashboardIcon from '@mui/icons-material/Dashboard';
+import FormatListBulletedIcon from '@mui/icons-material/FormatListBulleted';
 
 import { Link } from 'react-router-dom';
 
@@ -90,6 +91,13 @@ const MenuDrawer = ({ open }) => {
 							<FolderIcon />
 						</ListItemIcon>
 						<ListItemText>BIM360 Tree</ListItemText>
+					</ListItem>
+
+					<ListItem button key={'ModelProperties'} component={Link} to="/modelproperties">
+						<ListItemIcon>
+							<FormatListBulletedIcon />
+						</ListItemIcon>
+						<ListItemText>Model Properties</ListItemText>
 					</ListItem>
 				</List>
 			</Box>

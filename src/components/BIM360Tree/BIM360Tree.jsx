@@ -82,6 +82,7 @@ const CustomContent = React.forwardRef(function CustomContent(props, ref) {
 	};
 
 	const handleSelectionClick = (event) => {
+		console.log(props);
 		props.onClick();
 		handleSelection(event);
 	};
