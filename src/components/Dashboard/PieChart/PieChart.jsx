@@ -22,13 +22,13 @@ const PieChart = () => {
 	const innerHeight = height - margin.top - margin.bottom;
 	const innerWidth = width - margin.left - margin.right;
 
-	useEffect(() => {
-		console.log(data);
-	}, [data]);
+	// useEffect(() => {
+	// 	console.log(data);
+	// }, [data]);
 
-	useEffect(() => {
-		console.log(sheetData);
-	}, [sheetData]);
+	// useEffect(() => {
+	// 	console.log(sheetData);
+	// }, [sheetData]);
 
 	if (!data) {
 		return <pre>Loading...</pre>;

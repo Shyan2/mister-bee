@@ -1,9 +1,13 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { pie, arc, scaleOrdinal, schemeSet3, format } from 'd3';
 import { Legend } from './Legend';
 import { useEffect } from 'react';
 import { Typography } from '@mui/material';
 import WSPLogo from '../../Assets/Asset 16.png';
+
+import * as d3 from 'd3';
+
+const fadeOpacity = 0.2;
 
 const margin = {
 	top: 50,
@@ -12,16 +16,29 @@ const margin = {
 	left: 30,
 };
 
-const Arc = ({ data, index, createArc, colors, format }) => (
-	<g key={index} className="arc">
+const Arc = ({ data, index, createArc, colors, domainValue, hoveredValue, onHover }) => (
+	<g
+		key={index}
+		className="arc"
+		opacity={hoveredValue && domainValue !== hoveredValue ? fadeOpacity : 1}
+		onMouseEnter={() => {
+			onHover(domainValue);
+		}}
+		onMouseOut={() => {
+			onHover(null);
+		}}
+	>
 		<path className="arc" d={createArc(data)} fill={colors(index)} />
 		<text transform={`translate(${createArc.centroid(data)})`} textAnchor="middle" fill="black" fontSize="20">
-			{data.value + '億'}
+			{data.value}
 		</text>
+		<title fontSize="3rem">{data.value}</title>
 	</g>
 );
 
 const Pie = ({ data, innerRadius, outerRadius, innerWidth, innerHeight }) => {
+	const [hoveredValue, setHoveredValue] = useState(null);
+
 	const totalValue = data.reduce((a, { value }) => a + value, 0);
 	const colorValue = (d) => d.name;
 
@@ -39,9 +56,9 @@ const Pie = ({ data, innerRadius, outerRadius, innerWidth, innerHeight }) => {
 
 	return (
 		<>
-			<Typography sx={{ mt: 2 }} variant="h2" align="center">
+			{/* <Typography sx={{ mt: 2 }} variant="h2" align="center">
 				第二次建設計劃
-			</Typography>
+			</Typography> */}
 			<Typography variant="h2" align="center">
 				【計劃經費 {format('.2f')(totalValue)} 億】
 			</Typography>
@@ -52,12 +69,23 @@ const Pie = ({ data, innerRadius, outerRadius, innerWidth, innerHeight }) => {
 				xmlns="http://www.w3.org/2000/svg"
 				xmlnsXlink="http://www.w3.org/1999/xlink"
 			>
+				<div id="tooltip"></div>
 				<g transform={`translate(${margin.left},${margin.top})`}>
 					<g transform={`translate(${outerRadius} ${outerRadius})`}>
-						<image xlinkHref={`${WSPLogo}`} width="150" height="80" transform={`translate(-70, -20)`} />
+						<image xlinkHref={`${WSPLogo}`} width="150" height="80" transform={`translate(-73, -28)`} />
 						{pieData.map((d, i) => {
-							// console.log(d);
-							return <Arc key={i} index={d.data.name} data={d} createArc={createArc} colors={colorScale} />;
+							return (
+								<Arc
+									key={i}
+									index={d.data.name}
+									data={d}
+									createArc={createArc}
+									colors={colorScale}
+									hoveredValue={hoveredValue}
+									onHover={setHoveredValue}
+									domainValue={d.data['項目']}
+								/>
+							);
 						})}
 					</g>
 
@@ -65,7 +93,12 @@ const Pie = ({ data, innerRadius, outerRadius, innerWidth, innerHeight }) => {
 						<text x={35} y={-25} textAnchor="middle">
 							Legend
 						</text>
-						<Legend colorScale={colorScale} />
+						<Legend
+							colorScale={colorScale}
+							fadeOpacity={fadeOpacity}
+							hoveredValue={hoveredValue}
+							onHover={setHoveredValue}
+						/>
 					</g>
 				</g>
 			</svg>

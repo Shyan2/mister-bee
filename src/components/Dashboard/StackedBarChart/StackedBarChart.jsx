@@ -26,11 +26,11 @@ const yAxisLabelOffset = 40;
 const StackedBarChart = () => {
 	const data = useData();
 
-	useEffect(() => {
-		if (data) {
-			console.log(data);
-		}
-	}, [data]);
+	// useEffect(() => {
+	// 	if (data) {
+	// 		console.log(data);
+	// 	}
+	// }, [data]);
 
 	if (!data) {
 		return <pre>Loading ...</pre>;
@@ -59,11 +59,11 @@ const StackedBarChart = () => {
 
 	return (
 		<>
-			<Typography sx={{ mt: 2 }} variant="h1" align="center">
+			{/* <Typography sx={{ mt: 2 }} variant="h1" align="center">
 				收發文數量
-			</Typography>
+			</Typography> */}
 			<svg width={width} height={height}>
-				<rect width={width} height={height} fill="#f9f9f9" />
+				{/* <rect width={width} height={height} fill="#f9f9f9" /> */}
 				<g transform={`translate(${margin.left},${margin.top})`}>
 					<text
 						className="axis-label"

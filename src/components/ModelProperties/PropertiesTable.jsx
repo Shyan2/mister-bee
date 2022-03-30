@@ -107,7 +107,7 @@ const PropertiesTable = ({ items, isLoading }) => {
 		{
 			field: 'svf2Id',
 			headerName: 'ID',
-			width: 150,
+			width: 100,
 			headerClassName: 'header-theme',
 		},
 		{
@@ -134,12 +134,14 @@ const PropertiesTable = ({ items, isLoading }) => {
 			headerName: 'Material',
 			flex: 1,
 			headerClassName: 'header-theme',
+			hide: true,
 		},
 		{
 			field: 'revitCategory',
 			headerName: 'Revit Category',
 			flex: 1,
 			headerClassName: 'header-theme',
+			hide: true,
 		},
 		{
 			field: 'revitFamily',
@@ -150,7 +152,7 @@ const PropertiesTable = ({ items, isLoading }) => {
 		{
 			field: 'view',
 			headerName: '預覽',
-			width: 200,
+			width: 100,
 			headerClassName: 'header-theme',
 			sortable: false,
 			renderCell: (params) => {
@@ -167,7 +169,6 @@ const PropertiesTable = ({ items, isLoading }) => {
 
 								// window.NOP_VIEWER.navigation.FIT_TO_VIEW_VERTICAL_OFFSET = 0.2;
 								// window.NOP_VIEWER.navigation.FIT_TO_VIEW_HORIZONTAL_MARGIN = 0.2;
-								console.log(window.NOP_VIEWER.fitToView);
 								window.NOP_VIEWER.fitToView(params.id);
 							}}
 						>

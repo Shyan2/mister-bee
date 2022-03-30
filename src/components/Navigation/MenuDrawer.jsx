@@ -1,7 +1,7 @@
 import React from 'react';
 import { styled } from '@mui/material/styles';
 
-import { Box, List, Divider, ListItem, ListItemIcon, ListItemText } from '@mui/material';
+import { Box, List, Divider, ListItem, ListItemIcon, ListItemText, Typography } from '@mui/material';
 import MuiDrawer from '@mui/material/Drawer';
 import HomeIcon from '@mui/icons-material/Home';
 import DesignServicesIcon from '@mui/icons-material/DesignServices';
@@ -11,6 +11,7 @@ import SupervisorAccountIcon from '@mui/icons-material/SupervisorAccount';
 import SettingsIcon from '@mui/icons-material/Settings';
 import DashboardIcon from '@mui/icons-material/Dashboard';
 import FormatListBulletedIcon from '@mui/icons-material/FormatListBulleted';
+import FeedIcon from '@mui/icons-material/Feed';
 
 import { Link } from 'react-router-dom';
 
@@ -79,44 +80,57 @@ const MenuDrawer = ({ open }) => {
 						<ListItemText>Design Management</ListItemText>
 					</ListItem>
 
-					<ListItem button key={'KnowledgeBase'} component={Link} to="/knowledgeBase">
-						<ListItemIcon>
-							<LibraryBooksIcon />
-						</ListItemIcon>
-						<ListItemText>Knowledge Base</ListItemText>
-					</ListItem>
-
-					<ListItem button key={'BIM360Tree'} component={Link} to="/bim360tree">
-						<ListItemIcon>
-							<FolderIcon />
-						</ListItemIcon>
-						<ListItemText>BIM360 Tree</ListItemText>
-					</ListItem>
-
 					<ListItem button key={'ModelProperties'} component={Link} to="/modelproperties">
 						<ListItemIcon>
 							<FormatListBulletedIcon />
 						</ListItemIcon>
 						<ListItemText>Model Properties</ListItemText>
 					</ListItem>
+
+					<ListItem button key={'SendReceieveDocs'} component={Link} to="/sendReceiveDocs">
+						<ListItemIcon>
+							<FeedIcon />
+						</ListItemIcon>
+						<ListItemText>收發文</ListItemText>
+					</ListItem>
+				</List>
+			</Box>
+			<Divider />
+			<Box>
+				<ListItem button key={'BIM360Tree'} component={Link} to="/bim360tree">
+					<ListItemIcon>
+						<FolderIcon />
+					</ListItemIcon>
+					<ListItemText>BIM360 Tree</ListItemText>
+				</ListItem>
+				<List>
+					<ListItem button key={'KnowledgeBase'} component={Link} to="/knowledgeBase">
+						<ListItemIcon>
+							<LibraryBooksIcon />
+						</ListItemIcon>
+						<ListItemText>Knowledge Base</ListItemText>
+					</ListItem>
 				</List>
 			</Box>
 
 			<Divider />
-			<List>
-				<ListItem button key={'Admin'} disabled>
-					<ListItemIcon>
-						<SupervisorAccountIcon />
-					</ListItemIcon>
-					<ListItemText>Admin</ListItemText>
-				</ListItem>
-				<ListItem button key={'Settings'} disabled>
-					<ListItemIcon>
-						<SettingsIcon />
-					</ListItemIcon>
-					<ListItemText>Account</ListItemText>
-				</ListItem>
-			</List>
+
+			<Box>
+				<List>
+					<ListItem button key={'Admin'} disabled>
+						<ListItemIcon>
+							<SupervisorAccountIcon />
+						</ListItemIcon>
+						<ListItemText>Admin</ListItemText>
+					</ListItem>
+					<ListItem button key={'Settings'} disabled>
+						<ListItemIcon>
+							<SettingsIcon />
+						</ListItemIcon>
+						<ListItemText>Account</ListItemText>
+					</ListItem>
+				</List>
+			</Box>
 		</Drawer>
 	);
 };

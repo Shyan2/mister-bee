@@ -23,7 +23,7 @@ const margin = {
 const xAxisLabelOffset = 40;
 const yAxisLabelOffset = 60;
 
-const BarChart = () => {
+const GroupedBarChart = () => {
 	const data = useData();
 
 	// useEffect(() => {
@@ -86,11 +86,11 @@ const BarChart = () => {
 					<Marks innerHeight={innerHeight} data={data} xScale={xScale} yScale={yScale} />
 				</g>
 			</svg> */}
-			<Typography sx={{ mt: 2 }} variant="h1" align="center">
+			{/* <Typography sx={{ mt: 2 }} variant="h1" align="center">
 				TP6A_鋼構進場數量
-			</Typography>
+			</Typography> */}
 			<svg width={width} height={height}>
-				<rect width={width} height={height} fill="#f9f9f9" />
+				{/* <rect width={width} height={height} fill="#f9f9f9" /> */}
 				<g transform={`translate(${margin.left},${margin.top})`}>
 					<AxisBottom xScale={x} innerHeight={innerHeight} />
 
@@ -127,4 +127,4 @@ const BarChart = () => {
 	);
 };
 
-export default BarChart;
+export default GroupedBarChart;

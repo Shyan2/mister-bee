@@ -2,7 +2,7 @@ import React from 'react';
 import { pie, arc, scaleOrdinal, schemeSet3, format } from 'd3';
 import { useEffect } from 'react';
 import { Typography } from '@mui/material';
-import WSPLogo from '../../Assets/Asset 16.png';
+import WSPLogo from '../Assets/Asset 16.png';
 
 const margin = {
 	top: 50,

@@ -92,7 +92,7 @@ const SendReceieveDocs = () => {
 
 		return finalResult;
 	};
-	ProcessCirclesData(filteredData);
+
 	return (
 		<Box sx={{ m: 2 }}>
 			<DateRangeContext.Provider value={selectedDateRangeValue}>

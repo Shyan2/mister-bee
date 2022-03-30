@@ -6,21 +6,29 @@ import Switch from '@mui/material/Switch';
 
 const Selection = ({
 	pieChart,
-	barChart,
+	groupedBarChart,
 	progressCard,
 	stackedBarChart,
-	sendReceieveDocs,
+	barPlot,
+	setBarPlot,
+	circularPacking,
+	setCircularPacking,
+	lineChart,
+	setLineChart,
+	scatterPlot,
+	setScatterPlot,
+	treeMap,
+	setTreeMap,
 	setPieChart,
-	setBarChart,
+	setGroupedBarChart,
 	setProgressCard,
 	setStackedBarChart,
-	setSendReceiveDocs,
 }) => {
 	const handlePieChartChange = (event) => {
 		setPieChart(event.target.checked);
 	};
-	const handleBarChartChange = (event) => {
-		setBarChart(event.target.checked);
+	const handleGroupedBarChartChange = (event) => {
+		setGroupedBarChart(event.target.checked);
 	};
 	const handleProgressCardChange = (event) => {
 		setProgressCard(event.target.checked);
@@ -28,8 +36,21 @@ const Selection = ({
 	const handleStackedBarChartChange = (event) => {
 		setStackedBarChart(event.target.checked);
 	};
-	const handleSendReceieveDocsChange = (event) => {
-		setSendReceiveDocs(event.target.checked);
+
+	const handleBarPlotChange = (event) => {
+		setBarPlot(event.target.checked);
+	};
+	const handleCircularPackingChange = (event) => {
+		setCircularPacking(event.target.checked);
+	};
+	const handleLineChartChange = (event) => {
+		setLineChart(event.target.checked);
+	};
+	const handleScatterPlotChange = (event) => {
+		setScatterPlot(event.target.checked);
+	};
+	const handleTreeMapChange = (event) => {
+		setTreeMap(event.target.checked);
 	};
 
 	return (
@@ -38,28 +59,49 @@ const Selection = ({
 				<FormControlLabel
 					key={'piechart'}
 					control={<Switch checked={pieChart} onChange={handlePieChartChange} />}
-					label="第二次建設計劃"
+					label="Pie Chart"
 				/>
 				<FormControlLabel
-					key={'barchart'}
-					control={<Switch checked={barChart} onChange={handleBarChartChange} />}
-					label="TP6A_鋼構進場數量"
+					key={'groupedBarchart'}
+					control={<Switch checked={groupedBarChart} onChange={handleGroupedBarChartChange} />}
+					label="Grouped Barchart"
 				/>
-				<FormControlLabel
+				{/* <FormControlLabel
 					key={'progresscard'}
 					control={<Switch checked={progressCard} onChange={handleProgressCardChange} />}
 					label="計劃整體進度"
-				/>
+				/> */}
 				<FormControlLabel
 					key={'stackedbarchart'}
 					control={<Switch checked={stackedBarChart} onChange={handleStackedBarChartChange} />}
 					label="Stacked Chart"
 				/>
+
 				<FormControlLabel
-					key={'sendReceieveDocs'}
-					control={<Switch checked={sendReceieveDocs} onChange={handleSendReceieveDocsChange} />}
-					label="收發文"
+					key={'barplot'}
+					control={<Switch checked={barPlot} onChange={handleBarPlotChange} />}
+					label="Bar Plot"
 				/>
+				{/* <FormControlLabel
+					key={'circularpacking'}
+					control={<Switch checked={circularPacking} onChange={handleCircularPackingChange} />}
+					label="Circular Packing"
+				/> */}
+				<FormControlLabel
+					key={'linechart'}
+					control={<Switch checked={lineChart} onChange={handleLineChartChange} />}
+					label="Line Chart"
+				/>
+				<FormControlLabel
+					key={'scatterplot'}
+					control={<Switch checked={scatterPlot} onChange={handleScatterPlotChange} />}
+					label="Scatter Plot"
+				/>
+				{/* <FormControlLabel
+					key={'treemap'}
+					control={<Switch checked={treeMap} onChange={handleTreeMapChange} />}
+					label="Tree Map"
+				/> */}
 			</FormGroup>
 		</>
 	);

@@ -1,15 +1,62 @@
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useCallback } from 'react';
+import { Typography, Box, Container, Grid } from '@mui/material';
 
 import { useData } from './useData';
 
+import CirclePacking from './CirclePacking';
 import PropertiesTable from './PropertiesTable';
 import Barchart from './Barchart/Barchart';
 import Viewer from './Viewer';
+import { scaleSqrt, max } from 'd3';
+
+const width = 900;
+const height = 900;
+
+const margin = {
+	top: 100,
+	right: 50,
+	bottom: 70,
+	left: 100,
+};
+
+const fadeOpacity = 0.2;
 
 const ModelProperties = () => {
 	const data = useData();
 	const [isLoading, setIsLoading] = useState(false);
 	const [modelProperties, setModelProperties] = useState([]);
+
+	const [hoveredValue, setHoveredValue] = useState(null);
+	const [selectedValue, setSelectedValue] = useState(null);
+
+	const escFunction = useCallback((event) => {
+		if (event.key === 'Escape') {
+			// window.NOP_VIEWER.utilities.goHome();
+			setSelectedValue(null);
+			window.NOP_VIEWER.isolate(null);
+		}
+	}, []);
+
+	useEffect(() => {
+		document.addEventListener('keydown', escFunction, false);
+
+		return () => {
+			document.removeEventListener('keydown', escFunction, false);
+		};
+	}, []);
+
+	useEffect(() => {
+		if (selectedValue) {
+			// need to turn it into an array of svfIds
+			let returnArray = [];
+			filteredData.map((item) => {
+				returnArray.push(item.svf2Id);
+			});
+			window.NOP_VIEWER.isolate(returnArray);
+			window.NOP_VIEWER.select(returnArray);
+			window.NOP_VIEWER.fitToView(returnArray);
+		}
+	}, [selectedValue]);
 
 	useEffect(() => {
 		if (data) {
@@ -28,18 +75,80 @@ const ModelProperties = () => {
 				resObj ? resObj.Count++ : result.push({ revitCategory: item.revitCategory, Count: 1 });
 			});
 		}
-		return result;
+
+		// to remove items with count < 30. This is to clean the data for show
+		const filteredResult = result.filter(function (el) {
+			return el.Count > 30;
+		});
+		return filteredResult;
 	};
+
+	const sizeValue = (d) => d['Count'];
+	const maxRadius = 100;
+
+	const ProcessCirclePackingData = (inputData) => {
+		let result = [];
+		let finalResult = [];
+
+		if (inputData) {
+			inputData.forEach((item) => {
+				let resObj = result.find((resObj) => resObj.revitFamily === item.revitFamily);
+				resObj ? resObj.Count++ : result.push({ revitFamily: item.revitFamily, Count: 1 });
+			});
+			const sizeScale = scaleSqrt()
+				.domain([0, max(result, sizeValue)])
+				.range([0, maxRadius]);
+
+			result.forEach((item) => {
+				// item.size = +item.Count / 2;
+				// item.size < 3 ? (item.radius = 3) : (item.radius = item.size);
+				item.radius = sizeScale(sizeValue(item));
+				finalResult.push(item);
+			});
+		}
+
+		return finalResult;
+	};
+
+	const innerHeight = height - margin.top - margin.bottom;
+	const innerWidth = width - margin.left - margin.right;
+
+	// filter if selectedValue
+	const filteredData = selectedValue
+		? modelProperties.filter((d) => {
+				return d.revitCategory === selectedValue;
+		  })
+		: modelProperties;
+
 	return (
-		<>
-			<div>
-				<Barchart data={ProcessBarChartData(modelProperties)} />
-			</div>
-			<div>
-				<Viewer />
-			</div>
-			<div>{<PropertiesTable items={modelProperties} isLoading={isLoading} />}</div>
-		</>
+		<Box sx={{ m: 1 }}>
+			<Grid container spacing={2}>
+				<Grid item sm={12} lg={6}>
+					<Viewer />
+				</Grid>
+				<Grid item sm={6}>
+					<Barchart
+						data={ProcessBarChartData(modelProperties)}
+						onHover={setHoveredValue}
+						hoveredValue={hoveredValue}
+						onSelect={setSelectedValue}
+						selectedValue={selectedValue}
+						fadeOpacity={fadeOpacity}
+					/>
+				</Grid>
+
+				<Grid item sm={6}>
+					<div id="container">
+						<svg id="container-svg" width={innerWidth} height={innerHeight}></svg>
+						<div id="tooltip"></div>
+					</div>
+					<CirclePacking data={ProcessCirclePackingData(filteredData)} width={width} height={height} />
+				</Grid>
+				<Grid item sm={12} lg={6}>
+					<PropertiesTable items={filteredData} isLoading={isLoading} />
+				</Grid>
+			</Grid>
+		</Box>
 	);
 };
 

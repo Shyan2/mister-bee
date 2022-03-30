@@ -1,21 +1,21 @@
-import React from 'react';
+import React, { useRef } from 'react';
 import { csv, arc, pie, scaleBand, scaleLinear, max, format } from 'd3';
 
 import { AxisBottom } from './AxisBottom';
 import { AxisLeft } from './AxisLeft';
 import { Marks } from './Marks';
 
-const width = 960;
-const height = 960;
+const width = 900;
+const height = 700;
 const margin = {
 	top: 20,
 	right: 30,
 	bottom: 70,
-	left: 220,
+	left: 200,
 };
 const xAxisLabelOffset = 55;
 
-const Barchart = ({ data }) => {
+const Barchart = ({ data, onHover, hoveredValue, fadeOpacity, selectedValue, onSelect }) => {
 	// console.log(data);
 
 	if (!data) {
@@ -36,6 +36,8 @@ const Barchart = ({ data }) => {
 		.domain([0, max(data, xValue)])
 		.range([0, innerWidth]);
 
+	const colorValue = (d) => d.species;
+
 	return (
 		<svg width={width} height={height}>
 			<g transform={`translate(${margin.left},${margin.top})`}>
@@ -45,7 +47,30 @@ const Barchart = ({ data }) => {
 				{/* <text className="axis-label" x={innerWidth / 2} y={innerHeight + xAxisLabelOffset} textAnchor="middle">
 					Count
 				</text> */}
-				<Marks data={data} xScale={xScale} yScale={yScale} xValue={xValue} yValue={yValue} />
+				{/* <g opacity={selectedValue ? fadeOpacity : 1}> */}
+				<Marks
+					data={data}
+					xScale={xScale}
+					yScale={yScale}
+					xValue={xValue}
+					yValue={yValue}
+					onHover={onHover}
+					hoveredValue={hoveredValue}
+					fadeOpacity={fadeOpacity}
+					selectedValue={selectedValue}
+					onSelect={onSelect}
+				/>
+				{/* </g> */}
+				{/* <Marks
+					data={filteredData}
+					xScale={xScale}
+					yScale={yScale}
+					xValue={xValue}
+					yValue={yValue}
+					onHover={onHover}
+					hoveredValue={hoveredValue}
+					fadeOpacity={fadeOpacity}
+				/> */}
 			</g>
 		</svg>
 	);
