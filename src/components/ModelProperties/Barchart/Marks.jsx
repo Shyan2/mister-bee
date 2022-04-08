@@ -9,15 +9,16 @@ export const Marks = ({
 	fadeOpacity,
 	onSelect,
 	selectedValue,
+	innerHeight,
 }) =>
 	data.map((d) => (
 		<rect
 			className="mark"
 			key={yValue(d)}
-			x={0}
-			y={yScale(yValue(d))}
-			width={xScale(xValue(d))}
-			height={yScale.bandwidth()}
+			x={xScale(d.revitCategory)}
+			y={yScale(d.Count)}
+			width={xScale.bandwidth()}
+			height={innerHeight - yScale(d.Count)}
 			opacity={selectedValue && d.revitCategory !== selectedValue ? fadeOpacity : 1}
 			// onMouseEnter={() => {
 			// 	onHover(d.revitCategory);

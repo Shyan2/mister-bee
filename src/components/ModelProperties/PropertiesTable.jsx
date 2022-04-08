@@ -100,7 +100,7 @@ function QuickSearchToolbar(props) {
 }
 
 const PropertiesTable = ({ items, isLoading }) => {
-	console.log(items);
+	// console.log(items);
 	// const { selectedObject, setSelectedObject } = useContext(SelectedObjectContext);
 
 	const [columns] = useState([
@@ -109,6 +109,7 @@ const PropertiesTable = ({ items, isLoading }) => {
 			headerName: 'ID',
 			width: 100,
 			headerClassName: 'header-theme',
+			hide: true,
 		},
 		{
 			field: 'name',
@@ -128,6 +129,7 @@ const PropertiesTable = ({ items, isLoading }) => {
 			headerName: '類別',
 			flex: 1,
 			headerClassName: 'header-theme',
+			hide: true,
 		},
 		{
 			field: 'materialThree',

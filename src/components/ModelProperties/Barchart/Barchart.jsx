@@ -5,19 +5,15 @@ import { AxisBottom } from './AxisBottom';
 import { AxisLeft } from './AxisLeft';
 import { Marks } from './Marks';
 
-const width = 900;
-const height = 700;
 const margin = {
 	top: 20,
 	right: 30,
-	bottom: 70,
-	left: 200,
+	bottom: 80,
+	left: 50,
 };
 const xAxisLabelOffset = 55;
 
-const Barchart = ({ data, onHover, hoveredValue, fadeOpacity, selectedValue, onSelect }) => {
-	// console.log(data);
-
+const Barchart = ({ width, height, data, onHover, hoveredValue, fadeOpacity, selectedValue, onSelect }) => {
 	if (!data) {
 		return <pre>Loading...</pre>;
 	}
@@ -25,25 +21,24 @@ const Barchart = ({ data, onHover, hoveredValue, fadeOpacity, selectedValue, onS
 	const innerHeight = height - margin.top - margin.bottom;
 	const innerWidth = width - margin.left - margin.right;
 
-	const yValue = (d) => d.revitCategory;
-	const xValue = (d) => d.Count;
+	const xValue = (d) => d.revitCategory;
+	const yValue = (d) => d.Count;
 
 	const siFormat = format('.2s');
 
-	const yScale = scaleBand().domain(data.map(yValue)).range([0, innerHeight]).paddingInner(0.15);
+	const xScale = scaleBand().domain(data.map(xValue)).range([0, innerWidth]).paddingInner(0.15);
 
-	const xScale = scaleLinear()
-		.domain([0, max(data, xValue)])
-		.range([0, innerWidth]);
-
-	const colorValue = (d) => d.species;
+	const yScale = scaleLinear()
+		.domain([0, max(data, yValue)])
+		.range([innerHeight, 0])
+		.nice();
 
 	return (
 		<svg width={width} height={height}>
 			<g transform={`translate(${margin.left},${margin.top})`}>
 				<AxisBottom xScale={xScale} innerHeight={innerHeight} />
 
-				<AxisLeft yScale={yScale} />
+				<AxisLeft yScale={yScale} innerWidth={innerWidth} />
 				{/* <text className="axis-label" x={innerWidth / 2} y={innerHeight + xAxisLabelOffset} textAnchor="middle">
 					Count
 				</text> */}
@@ -59,6 +54,7 @@ const Barchart = ({ data, onHover, hoveredValue, fadeOpacity, selectedValue, onS
 					fadeOpacity={fadeOpacity}
 					selectedValue={selectedValue}
 					onSelect={onSelect}
+					innerHeight={innerHeight}
 				/>
 				{/* </g> */}
 				{/* <Marks

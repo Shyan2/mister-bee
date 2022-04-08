@@ -10,9 +10,10 @@ import Barchart from './Barchart/Barchart';
 import CirclePacking from './CirclePacking/CirclePacking';
 import DataTable from './DataTable/DataTable';
 import { scaleSqrt, max } from 'd3';
+import { useWindowSize } from './useWindowSize';
 
-const width = 850;
-const height = 650;
+const width = 750;
+const height = 400;
 const innerRadius = 100;
 const outerRadius = 200;
 
@@ -23,10 +24,10 @@ const dateHistogramSize = 0.2;
 const xValue = (d) => d['RECEIVE_DATE'];
 
 const margin = {
-	top: 100,
-	right: 50,
-	bottom: 70,
-	left: 100,
+	top: 50,
+	right: 5,
+	bottom: 30,
+	left: 10,
 };
 
 const SendReceieveDocs = () => {
@@ -38,6 +39,9 @@ const SendReceieveDocs = () => {
 		() => ({ selectedDateRange, setSelectedDateRange }),
 		[selectedDateRange, setSelectedDateRange],
 	);
+
+	const [windowWidth, windowHeight] = useWindowSize();
+	// console.log(windowWidth, windowHeight);
 
 	const innerHeight = height - margin.top - margin.bottom;
 	const innerWidth = width - margin.left - margin.right;
@@ -94,23 +98,46 @@ const SendReceieveDocs = () => {
 	};
 
 	return (
-		<Box sx={{ m: 2 }}>
+		<Box sx={{ ml: 2, mt: 2 }}>
 			<DateRangeContext.Provider value={selectedDateRangeValue}>
 				<Grid container spacing={2}>
-					<Grid item xs={12}>
+					<Grid item sm={12}>
 						<DateHistogram
+							className="dateHistogram"
 							data={data}
 							height={dateHistogramSize * height}
-							width={1800}
+							width={windowWidth - 100}
 							xValue={xValue}
 							setBrushExtent={setBrushExtent}
 						/>
 					</Grid>
 
-					<Grid item xs={12}>
-						<Box sx={{ mt: 3 }}>
+					<Grid item sm={12} md={12} lg={5}>
+						<Box sx={{ mt: 0.5 }}>
 							<InfoCards data={filteredData} brushExtent={brushExtent} />
+							<Box
+								sx={{ mt: 1 }}
+								style={{ display: 'flex', alignItems: 'center', flexWrap: 'wrap', justifyContent: 'center' }}
+							>
+								<Typography variant="h3" fontWeight="bold">
+									來文單位
+								</Typography>
+							</Box>
+
+							<Barchart width={innerWidth} height={innerHeight} data={ProcessPieData(filteredData)} />
+							<Box style={{ display: 'flex', alignItems: 'center', flexWrap: 'wrap', justifyContent: 'center' }}>
+								<Typography variant="h3" fontWeight="bold">
+									公文類型
+								</Typography>
+							</Box>
+							<div id="container">
+								<svg id="container-svg" width={innerWidth} height={innerHeight}></svg>
+								<div id="tooltip"></div>
+							</div>
 						</Box>
+					</Grid>
+					<Grid item sm={12} md={12} lg={12} xl={7}>
+						<DataTable data={filteredData} />
 					</Grid>
 
 					{/* <Grid item xs={8} md={6}>
@@ -125,21 +152,12 @@ const SendReceieveDocs = () => {
 						/>
 					</Grid> */}
 
-					<Grid item xs={6}>
-						<Barchart data={ProcessPieData(filteredData)} />
-					</Grid>
+					{/* <Grid item sm={12} md={6} lg={6}></Grid>
 
-					<Grid item xs={6}>
-						<div id="container">
-							<svg id="container-svg" width={innerWidth} height={innerHeight}></svg>
-							<div id="tooltip"></div>
-						</div>
-					</Grid>
+					<Grid item sm={12} md={6} lg={6}></Grid> */}
 				</Grid>
 
 				<CirclePacking data={ProcessCirclesData(filteredData)} width={innerWidth} height={innerHeight} />
-
-				<DataTable data={filteredData} />
 			</DateRangeContext.Provider>
 		</Box>
 	);

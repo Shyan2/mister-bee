@@ -103,14 +103,14 @@ function QuickSearchToolbar(props) {
 const DataTable = ({ data }) => {
 	// console.log(data);
 	const [columns] = useState([
-		{
-			field: 'SUBJECT',
-			headerName: '主旨',
-			flex: 1,
-			minWidth: 200,
-			headerClassName: 'header-theme',
-			// hide: true,
-		},
+		// {
+		// 	field: 'SUBJECT',
+		// 	headerName: '主旨',
+		// 	flex: 1,
+		// 	minWidth: 200,
+		// 	headerClassName: 'header-theme',
+		// 	// hide: true,
+		// },
 		{
 			field: 'DELIVER_NO',
 			headerName: '來文文號',
@@ -141,6 +141,30 @@ const DataTable = ({ data }) => {
 			headerClassName: 'header-theme',
 			valueFormatter: (params) => moment(params.value).format('YYYY/MM/DD'),
 		},
+		{
+			field: 'view',
+			headerName: '預覽',
+			width: 100,
+			headerClassName: 'header-theme',
+			sortable: false,
+			renderCell: (params) => {
+				return (
+					<div>
+						<IconButton
+							variant="contained"
+							size="small"
+							style={{ marginLeft: 16 }}
+							onClick={() => {
+								console.log(params.row);
+							}}
+						>
+							{/* 預覽 */}
+							<PreviewIcon color="primary" />
+						</IconButton>
+					</div>
+				);
+			},
+		},
 	]);
 
 	const [searchText, setSearchText] = useState('');
@@ -153,11 +177,11 @@ const DataTable = ({ data }) => {
 		},
 	]);
 
-	const searchFilter = ({ name, version, filePath, fileSize, lastUpdated }) => ({
-		name,
-		version,
-		filePath,
-		lastUpdated,
+	const searchFilter = ({ DELIVER_LETTER_TYPE, DELIVER_NO, DELIVER_UNIT, SUBJECT }) => ({
+		DELIVER_LETTER_TYPE,
+		DELIVER_NO,
+		DELIVER_UNIT,
+		SUBJECT,
 	});
 	const requestSearch = (searchValue) => {
 		setSearchText(searchValue);
@@ -173,10 +197,10 @@ const DataTable = ({ data }) => {
 	useEffect(() => {
 		setRows(data);
 	}, [data]);
-
+	console.log(rows);
 	return (
 		<Box
-			style={{ height: '80vh', width: '100%' }}
+			style={{ height: '75vh', width: '100%' }}
 			sx={{
 				'& .header-theme': {
 					backgroundColor: '#f7f9fa',

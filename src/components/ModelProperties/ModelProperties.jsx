@@ -9,8 +9,13 @@ import Barchart from './Barchart/Barchart';
 import Viewer from './Viewer';
 import { scaleSqrt, max } from 'd3';
 
-const width = 900;
-const height = 900;
+import { useWindowSize } from './useWindowSize';
+
+const width = 750;
+const height = 600;
+
+const sizeValue = (d) => d['Count'];
+const maxRadius = 50;
 
 const margin = {
 	top: 100,
@@ -28,6 +33,8 @@ const ModelProperties = () => {
 
 	const [hoveredValue, setHoveredValue] = useState(null);
 	const [selectedValue, setSelectedValue] = useState(null);
+
+	const [windowWidth, windowHeight] = useWindowSize();
 
 	const escFunction = useCallback((event) => {
 		if (event.key === 'Escape') {
@@ -78,13 +85,10 @@ const ModelProperties = () => {
 
 		// to remove items with count < 30. This is to clean the data for show
 		const filteredResult = result.filter(function (el) {
-			return el.Count > 30;
+			return el.Count > 10;
 		});
 		return filteredResult;
 	};
-
-	const sizeValue = (d) => d['Count'];
-	const maxRadius = 100;
 
 	const ProcessCirclePackingData = (inputData) => {
 		let result = [];
@@ -122,31 +126,60 @@ const ModelProperties = () => {
 
 	return (
 		<Box sx={{ m: 1 }}>
-			<Grid container spacing={2}>
-				<Grid item sm={12} lg={6}>
-					<Viewer />
-				</Grid>
-				<Grid item sm={6}>
-					<Barchart
-						data={ProcessBarChartData(modelProperties)}
-						onHover={setHoveredValue}
-						hoveredValue={hoveredValue}
-						onSelect={setSelectedValue}
-						selectedValue={selectedValue}
-						fadeOpacity={fadeOpacity}
-					/>
-				</Grid>
-
-				<Grid item sm={6}>
-					<div id="container">
-						<svg id="container-svg" width={innerWidth} height={innerHeight}></svg>
-						<div id="tooltip"></div>
-					</div>
-					<CirclePacking data={ProcessCirclePackingData(filteredData)} width={width} height={height} />
-				</Grid>
-				<Grid item sm={12} lg={6}>
+			<Grid container spacing={1}>
+				<Grid item sm={12} lg={4}>
 					<PropertiesTable items={filteredData} isLoading={isLoading} />
 				</Grid>
+				<Grid container item sm={8}>
+					<Grid item sm={5} lg={6}>
+						<Viewer />
+					</Grid>
+					<Grid item sm={5} lg={6}>
+						{isLoading ? (
+							<pre>Loading ...</pre>
+						) : (
+							<>
+								<Box
+									sx={{ mt: 2 }}
+									style={{ display: 'flex', alignItems: 'center', flexWrap: 'wrap', justifyContent: 'center' }}
+								>
+									<Typography variant="h4">Model Family Distribution</Typography>
+								</Box>
+								<div id="container">
+									<svg id="container-svg" width={windowWidth * 0.3} height={windowHeight * 0.4}></svg>
+									<div id="tooltip"></div>
+								</div>
+							</>
+						)}
+					</Grid>
+					<Grid item sm={12}>
+						{isLoading ? (
+							<pre>Loading ... </pre>
+						) : (
+							<>
+								<Box style={{ display: 'flex', alignItems: 'center', flexWrap: 'wrap', justifyContent: 'center' }}>
+									<Typography variant="h4">Quantity Take-off Categories</Typography>
+								</Box>
+								<Barchart
+									data={ProcessBarChartData(modelProperties)}
+									onHover={setHoveredValue}
+									hoveredValue={hoveredValue}
+									onSelect={setSelectedValue}
+									selectedValue={selectedValue}
+									fadeOpacity={fadeOpacity}
+									width={windowWidth * 0.62}
+									height={windowHeight * 0.34}
+								/>
+							</>
+						)}
+					</Grid>
+				</Grid>
+
+				<CirclePacking
+					data={ProcessCirclePackingData(filteredData)}
+					width={windowWidth * 0.3}
+					height={windowHeight * 0.4}
+				/>
 			</Grid>
 		</Box>
 	);

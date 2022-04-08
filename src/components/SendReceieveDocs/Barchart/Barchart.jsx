@@ -11,11 +11,11 @@ const margin = {
 	top: 20,
 	right: 30,
 	bottom: 70,
-	left: 220,
+	left: 260,
 };
 const xAxisLabelOffset = 55;
 
-const Barchart = ({ data }) => {
+const Barchart = ({ width, height, data }) => {
 	// console.log(data);
 
 	if (!data) {

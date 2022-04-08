@@ -1,5 +1,6 @@
 import { useRef, useEffect, useMemo, useContext } from 'react';
 import { DateRangeContext } from '../Context';
+import { useWindowSize } from '../useWindowSize';
 
 import {
 	scaleLinear,
