@@ -4,6 +4,9 @@ import useStyles from './styles';
 import { Link } from 'react-router-dom';
 import { AppBar, Box, Typography, Toolbar, IconButton, Button } from '@mui/material';
 import MenuIcon from '@mui/icons-material/Menu';
+import LoginIcon from '@mui/icons-material/Login';
+import LogoutIcon from '@mui/icons-material/Logout';
+
 import MenuDrawer from './MenuDrawer';
 
 import axios from 'axios';
@@ -112,20 +115,20 @@ const Navbar = () => {
 							&nbsp; &nbsp;
 							<Typography>{user.firstName + ' ' + user.lastName}</Typography>
 							&nbsp;
-							<Button
+							<IconButton
 								color="inherit"
 								onClick={() => {
 									// console.log('Lougout Clicked!');
 									logOutAutodesk();
 								}}
 							>
-								<Typography>Logout</Typography>
-							</Button>
+								<LogoutIcon />
+							</IconButton>
 						</Box>
 					) : (
-						<Button color="inherit" href={loginLink}>
-							<Typography>Login</Typography>
-						</Button>
+						<IconButton color="inherit" href={loginLink}>
+							<LoginIcon />
+						</IconButton>
 					)}
 				</Toolbar>
 			</AppBar>

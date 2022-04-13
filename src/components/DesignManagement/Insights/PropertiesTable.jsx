@@ -1,5 +1,5 @@
 import { useState, useEffect, useContext } from 'react';
-import { ModelPropertiesContext, SelectedObjectContext } from './Context';
+// import { SelectedObjectContext } from './Context';
 import { Box, TextField, IconButton } from '@mui/material';
 import {
 	DataGrid,
@@ -13,11 +13,11 @@ import {
 import ClearIcon from '@mui/icons-material/Clear';
 import SearchIcon from '@mui/icons-material/Search';
 import CompareIcon from '@mui/icons-material/Compare';
-import BarChartIcon from '@mui/icons-material/BarChart';
 
-import { localizedTextsMap } from '../../localizedTextMap';
+import { localizedTextsMap } from '../../../localizedTextMap';
 import PreviewIcon from '@mui/icons-material/Preview';
 import LinearProgress from '@mui/material/LinearProgress';
+import { ContentCutOutlined, ThreeDRotation } from '@mui/icons-material';
 
 function CustomLoadingOverlay() {
 	return (
@@ -37,7 +37,7 @@ function QuickSearchToolbar(props) {
 	return (
 		<Box
 			sx={{
-				p: 0,
+				p: 0.5,
 				pb: 0,
 				justifyContent: 'space-between',
 				display: 'flex',
@@ -99,50 +99,62 @@ function QuickSearchToolbar(props) {
 	);
 }
 
-const DesignTable = ({ items, isLoading }) => {
-	const { selectedObject, setSelectedObject } = useContext(SelectedObjectContext);
-	const { selectedModelProps, setSelectedModelProps } = useContext(ModelPropertiesContext);
+const PropertiesTable = ({ items, isLoading }) => {
+	// console.log(items);
+	// const { selectedObject, setSelectedObject } = useContext(SelectedObjectContext);
 
 	const [columns] = useState([
 		{
+			field: 'svf2Id',
+			headerName: 'ID',
+			width: 100,
+			headerClassName: 'header-theme',
+			hide: true,
+		},
+		{
 			field: 'name',
-			headerName: '資料名稱',
+			headerName: 'Name',
 			flex: 1,
 			headerClassName: 'header-theme',
 		},
-		// { field: 'id', headerName: 'ID', width: 90 },
-
 		{
-			field: 'version',
-			headerName: '版次',
-			minWidth: 100,
-			sortable: false,
+			field: 'category',
+			headerName: 'Category',
+			flex: 1,
 			headerClassName: 'header-theme',
 		},
+
 		{
-			field: 'filePath',
+			field: 'materialOne',
 			headerName: '類別',
 			flex: 1,
 			headerClassName: 'header-theme',
+			hide: true,
 		},
 		{
-			field: 'fileSize',
-			headerName: '大小',
-			width: 150,
+			field: 'materialThree',
+			headerName: 'Material',
+			flex: 1,
 			headerClassName: 'header-theme',
-			// hide: true,
+			hide: true,
 		},
 		{
-			field: 'lastUpdated',
-			headerName: '最後更新',
-			width: 150,
+			field: 'revitCategory',
+			headerName: 'Revit Category',
+			flex: 1,
 			headerClassName: 'header-theme',
-			// hide: true,
+			hide: true,
+		},
+		{
+			field: 'revitFamily',
+			headerName: 'Revit Family',
+			flex: 1,
+			headerClassName: 'header-theme',
 		},
 		{
 			field: 'view',
 			headerName: '預覽',
-			width: 200,
+			width: 100,
 			headerClassName: 'header-theme',
 			sortable: false,
 			renderCell: (params) => {
@@ -153,58 +165,18 @@ const DesignTable = ({ items, isLoading }) => {
 							size="small"
 							style={{ marginLeft: 16 }}
 							onClick={() => {
-								setSelectedObject({
-									id: params.id,
-									name: params.row.name,
-									urn: params.row.urn,
-									simpleView: true,
-								});
+								// console.log(params);
+								window.NOP_VIEWER.isolate(params.id);
+								window.NOP_VIEWER.select(params.id);
+
+								// window.NOP_VIEWER.navigation.FIT_TO_VIEW_VERTICAL_OFFSET = 0.2;
+								// window.NOP_VIEWER.navigation.FIT_TO_VIEW_HORIZONTAL_MARGIN = 0.2;
+								window.NOP_VIEWER.fitToView(params.id);
 							}}
 						>
 							{/* 預覽 */}
 							<PreviewIcon color="primary" />
 						</IconButton>
-						{params.row.indexState === 'FINISHED' && (
-							<IconButton
-								variant="contained"
-								size="small"
-								style={{ marginLeft: 16 }}
-								onClick={() => {
-									console.log(params.row);
-									setSelectedModelProps({
-										indexId: params.row.indexId,
-										queryId: params.row.queryId,
-										urn: params.row.urn,
-										versionName: params.row.name + ' ' + params.row.version,
-									});
-								}}
-							>
-								<BarChartIcon color="primary" />
-							</IconButton>
-						)}
-						{/* check if dwg or pdf has versions to compare */}
-						{parseInt(params.row.version.substring(params.row.version.indexOf('V') + 1)) > 1 &&
-							(params.row.name.substring(params.row.name.length - 4) === '.dwg' ||
-								params.row.name.substring(params.row.name.length - 4) === '.pdf') && (
-								<IconButton
-									variant="contained"
-									size="small"
-									style={{ marginLeft: 16 }}
-									onClick={() => {
-										setSelectedObject({
-											id: params.id,
-											name: params.row.name,
-											urn: params.row.urn,
-											versionPath: params.row.versionPath,
-											version: params.row.version,
-											// ...params.row,
-											compareView: true,
-										});
-									}}
-								>
-									<CompareIcon color="primary" />
-								</IconButton>
-							)}
 					</div>
 				);
 			},
@@ -220,11 +192,11 @@ const DesignTable = ({ items, isLoading }) => {
 			sort: 'asc',
 		},
 	]);
-	const searchFilter = ({ name, version, filePath, fileSize, lastUpdated }) => ({
+	const searchFilter = ({ name, category, revitCategory, revitFamily }) => ({
 		name,
-		version,
-		filePath,
-		lastUpdated,
+		category,
+		revitCategory,
+		revitFamily,
 	});
 	const requestSearch = (searchValue) => {
 		setSearchText(searchValue);
@@ -243,7 +215,7 @@ const DesignTable = ({ items, isLoading }) => {
 
 	return (
 		<Box
-			style={{ height: '97%', width: '100%' }}
+			style={{ height: '77vh', width: '100%' }}
 			sx={{
 				'& .header-theme': {
 					backgroundColor: '#f7f9fa',
@@ -253,6 +225,7 @@ const DesignTable = ({ items, isLoading }) => {
 			}}
 		>
 			<DataGrid
+				getRowId={(row) => row.svf2Id}
 				aria-label="File Data Grid"
 				localeText={localizedTextsMap}
 				// localeText={zhCN.components.MuiDataGrid.defaultProps.localeText}
@@ -275,4 +248,4 @@ const DesignTable = ({ items, isLoading }) => {
 	);
 };
 
-export default DesignTable;
+export default PropertiesTable;

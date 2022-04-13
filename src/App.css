@@ -6,9 +6,16 @@ body {
 
 #viewerContainer {
 	width: 100%;
-	height: calc(50vh);
+	height: calc(70vh);
 	position: relative;
 }
+
+#modelPropsViewerContainer {
+	width: 100%;
+	height: calc(40vh);
+	position: relative;
+}
+
 #compareViewerContainer {
 	width: 100%;
 	height: calc(80vh);

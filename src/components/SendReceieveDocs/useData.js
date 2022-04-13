@@ -38,6 +38,7 @@ export const useData = () => {
 
 	const fetchSendData = async () => {
 		const result = await axios.get(`${SERVER_URL}/api/pmis/getsenddocs`);
+		console.log(result.data);
 		setSendData(result.data.recordset);
 	};
 
@@ -54,12 +55,12 @@ export const useData = () => {
 
 	useEffect(() => {
 		fetchReceieveData();
-		// fetchSendData();
+		fetchSendData();
 	}, []);
 
 	useEffect(() => {
 		if (receiveData) {
-			// process da ta
+			// process data
 			processData(receiveData);
 			setData(receiveData);
 		}

@@ -3,13 +3,17 @@ import React, { useState, useEffect, useRef, useContext } from 'react';
 import axios from 'axios';
 import { AppBar, Box, IconButton, Toolbar, Typography } from '@mui/material';
 import ArrowBackIcon from '@mui/icons-material/ArrowBack';
+import { ModelPropertiesContext } from '../Context';
 
 const SERVER_URL = process.env.REACT_APP_API_ROUTE;
 
 const AV = Autodesk.Viewing;
 
 const Viewer = (props) => {
-	const urn = 'dXJuOmFkc2sud2lwcHJvZDpmcy5maWxlOnZmLlg1MmtCNmpqVEptOGJTOHJKSzdEeVE_dmVyc2lvbj0z';
+	const { selectedModelProps, setSelectedModelProps } = useContext(ModelPropertiesContext);
+	// console.log(selectedModelProps);
+	// const urn = 'dXJuOmFkc2sud2lwcHJvZDpmcy5maWxlOnZmLlg1MmtCNmpqVEptOGJTOHJKSzdEeVE_dmVyc2lvbj0z';
+	const urn = selectedModelProps.urn;
 	const [accessToken, setAccessToken] = useState(null);
 
 	useEffect(() => {

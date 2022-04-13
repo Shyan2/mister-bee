@@ -1,11 +1,12 @@
 import { useState, useEffect, useMemo } from 'react';
-import { SelectedObjectContext } from './Context';
+import { SelectedObjectContext, ModelPropertiesContext } from './Context';
 import { Box, CircularProgress } from '@mui/material';
 
 import DesignTable from './DesignTable';
 import Viewer from './Viewer';
 import Compare2d from './Compare2d';
 import ProjectSelection from './ProjectSelection';
+import Insights from './Insights/Insights';
 
 import moment from 'moment';
 import axios from 'axios';
@@ -15,14 +16,22 @@ const SERVER_URL = process.env.REACT_APP_API_ROUTE;
 function DesignManagement() {
 	const [isLoading, setIsLoading] = useState(false);
 	const [items, setItems] = useState([]);
-	const [selectedObject, setSelectedObject] = useState({});
 
 	const [selectedProject, setSelectedProject] = useState({});
 	const [selectedFolder, setSelectedFolder] = useState({});
 
+	// for context
+	const [selectedObject, setSelectedObject] = useState({});
+	const [selectedModelProps, setSelectedModelProps] = useState({});
+
 	const selectedObjectValue = useMemo(
 		() => ({ selectedObject, setSelectedObject }),
 		[selectedObject, setSelectedObject],
+	);
+
+	const selectedModelPropsValue = useMemo(
+		() => ({ selectedModelProps, setSelectedModelProps }),
+		[selectedModelProps, setSelectedModelProps],
 	);
 
 	useEffect(() => {
@@ -43,8 +52,41 @@ function DesignManagement() {
 							`${SERVER_URL}/api/forge/getConstructionItems?projectID=${selectedProject.projectID}`,
 						);
 					}
+
+					// want to batch process the data, so need to call the postBatchIndexes with all the versions from above
+
+					// console.log(result.data);
+					let versions = [];
+					result.data.map((item) => {
+						// need to filter. Only allow .rvt and .nwd files.
+						if (item.name.substring(item.name.length - 4) === '.rvt') {
+							// console.log(item.name);
+							versions.push({
+								versionUrn: item.version,
+							});
+						}
+					});
+					const versionResult = await axios.post(
+						`${SERVER_URL}/api/forge/modelproperties/postBatchIndexes?projectID=${selectedProject.projectID}`,
+						{
+							data: {
+								versions,
+							},
+						},
+						{
+							withCredentials: true,
+						},
+					);
+
+					// console.log(versionResult.data.indexes);
+
 					result.data.forEach((item) => {
+						// match versions and items. Optional chaining because versionResult may be undefined
+						let properties = versionResult?.data?.indexes?.find((o) => o.versionUrns[0] === item.version);
 						itemList.push({
+							indexState: properties?.state,
+							indexId: properties?.indexId,
+							queryId: properties?.queryId, // This value may need to be implemented differently!!!
 							id: item._id,
 							name: item.name,
 							version: 'V' + item.version.substring(item.version.indexOf('=') + 1),
@@ -59,7 +101,7 @@ function DesignManagement() {
 					setItems(itemList);
 					setIsLoading(false);
 				} catch (error) {
-					console.log(error);
+					// console.log(error);
 					throw error;
 				}
 			};
@@ -71,20 +113,26 @@ function DesignManagement() {
 
 	return (
 		<Box sx={{ m: 2 }}>
-			<ProjectSelection {...{ selectedProject, setSelectedProject, selectedFolder, setSelectedFolder }} />
 			<SelectedObjectContext.Provider value={selectedObjectValue}>
-				{selectedObject.compareView && <Compare2d projectID={selectedProject.projectID} />}
-				{selectedObject.simpleView && <Viewer />}
-				<Box
-					style={{
-						height: '85vh',
-						display: !selectedObject.id ? 'flex' : 'none',
-						justifyContent: 'center',
-						alignItems: 'center',
-					}}
-				>
-					{!items ? <CircularProgress /> : <DesignTable items={items} isLoading={isLoading} />}
-				</Box>
+				<ModelPropertiesContext.Provider value={selectedModelPropsValue}>
+					<ProjectSelection {...{ selectedProject, setSelectedProject, selectedFolder, setSelectedFolder }} />
+
+					<Box
+						sx={{ m: 0 }}
+						style={{
+							height: '75vh',
+							display: !selectedObject.id && !selectedModelProps.indexId ? 'flex' : 'none',
+							justifyContent: 'center',
+							alignItems: 'center',
+						}}
+					>
+						{!items ? <CircularProgress /> : <DesignTable items={items} isLoading={isLoading} />}
+					</Box>
+
+					{selectedObject.compareView && <Compare2d projectID={selectedProject.projectID} />}
+					{selectedObject.simpleView && <Viewer />}
+					{selectedModelProps.indexId && <Insights projectId={selectedProject.projectID} />}
+				</ModelPropertiesContext.Provider>
 			</SelectedObjectContext.Provider>
 		</Box>
 	);

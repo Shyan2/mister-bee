@@ -44,6 +44,7 @@ const DateHistogram = ({ data, width, height, xValue, setBrushExtent }) => {
 		() => scaleTime().domain(extent(data, xValue)).range([0, innerWidth]).nice(),
 		[data, xValue, innerWidth],
 	);
+
 	useEffect(() => {
 		const timeRange = xScale.domain();
 		setSelectedDateRange([xAxisTickFormat(timeRange[0]), xAxisTickFormat(timeRange[1])]);

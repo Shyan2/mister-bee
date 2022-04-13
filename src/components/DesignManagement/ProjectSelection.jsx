@@ -1,4 +1,6 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useContext } from 'react';
+import { SelectedObjectContext, ModelPropertiesContext } from './Context';
+import AutodeskUser from './AutodeskUser/AutodeskUser';
 import { Box, Button, InputLabel, MenuItem, FormControl, Select, IconButton } from '@mui/material';
 import ProjectMapping from '../../ProjectMapping';
 import RefreshIcon from '@mui/icons-material/Refresh';
@@ -7,10 +9,26 @@ import axios from 'axios';
 
 const SERVER_URL = process.env.REACT_APP_API_ROUTE;
 
+// const DEFAULT_PROJECT = '2800450A';
+const DEFAULT_PROJECT = process.env.REACT_APP_DEFAULT_PROJECT;
+
 const ProjectSelection = ({ selectedProject, setSelectedProject, selectedFolder, setSelectedFolder }) => {
+	const { selectedObject, setSelectedObject } = useContext(SelectedObjectContext);
+	const { selectedModelProps, setSelectedModelProps } = useContext(ModelPropertiesContext);
+
 	const [projectList, setProjectList] = useState([]);
 	const [folderList, setFolderList] = useState([]);
 	const [isLoading, setIsLoading] = useState(false);
+	const [isDisabled, setIsDisabled] = useState(false);
+
+	useEffect(() => {
+		if (selectedObject.id || selectedModelProps.indexId) {
+			setIsDisabled(true);
+		} else {
+			setIsDisabled(false);
+		}
+		// console.log(isDisabled);
+	}, [selectedObject, selectedModelProps]);
 
 	const handleProjectChange = (event) => {
 		setSelectedFolder({});
@@ -26,12 +44,19 @@ const ProjectSelection = ({ selectedProject, setSelectedProject, selectedFolder,
 		setSelectedFolder(obj);
 	};
 
+	// get projects from master mapping file
 	useEffect(() => {
 		let tempList = [];
 		ProjectMapping.forEach((project) => {
 			tempList.push(project.projectName);
 		});
 		setProjectList(tempList);
+
+		// set default project and folders
+		let obj = ProjectMapping.find((o) => o.projectName === DEFAULT_PROJECT);
+		setSelectedProject(obj);
+		setFolderList(obj.folders);
+		setSelectedFolder(obj.folders[0]);
 	}, []);
 
 	const getFolders = () => {
@@ -68,7 +93,7 @@ const ProjectSelection = ({ selectedProject, setSelectedProject, selectedFolder,
 						folderID: selectedFolder.folderID,
 					},
 				});
-				console.log(desResult);
+				// console.log(desResult);
 				setIsLoading(false);
 				break;
 			case 'construction':
@@ -78,7 +103,7 @@ const ProjectSelection = ({ selectedProject, setSelectedProject, selectedFolder,
 						folderID: selectedFolder.folderID,
 					},
 				});
-				console.log(constResult);
+				// console.log(constResult);
 				setIsLoading(false);
 				break;
 			case 'BIM':
@@ -88,7 +113,7 @@ const ProjectSelection = ({ selectedProject, setSelectedProject, selectedFolder,
 						folderID: selectedFolder.folderID,
 					},
 				});
-				console.log(BIMresult);
+				// console.log(BIMresult);
 				setIsLoading(false);
 				break;
 			default:
@@ -99,8 +124,8 @@ const ProjectSelection = ({ selectedProject, setSelectedProject, selectedFolder,
 	return (
 		<Box sx={{ display: 'flex', flexDirection: 'row', justifyContent: 'space-between' }}>
 			<Box>
-				<FormControl sx={{ mr: 2, minWidth: 240 }}>
-					<InputLabel id="project-select-label">Select Project</InputLabel>
+				<FormControl size="small" sx={{ mr: 2, minWidth: 240 }} disabled={isDisabled}>
+					<InputLabel id="project-select-label">專案 / Project</InputLabel>
 					<Select
 						labelId="project-select-label"
 						id="project-select"
@@ -112,8 +137,8 @@ const ProjectSelection = ({ selectedProject, setSelectedProject, selectedFolder,
 					</Select>
 				</FormControl>
 				{selectedProject.projectName && (
-					<FormControl sx={{ minWidth: 240 }}>
-						<InputLabel id="folder-select-label">Select Folder</InputLabel>
+					<FormControl size="small" sx={{ minWidth: 240 }} disabled={isDisabled}>
+						<InputLabel id="folder-select-label">資料夾 / Folder</InputLabel>
 						<Select
 							labelId="folder-select-label"
 							id="folder-select"
@@ -126,21 +151,23 @@ const ProjectSelection = ({ selectedProject, setSelectedProject, selectedFolder,
 					</FormControl>
 				)}
 			</Box>
-
-			{selectedFolder.folderName && (
-				<IconButton
-					size="large"
-					color="secondary"
-					// variant="outlined"
-					// sx={{ ml: 2, mt: 1 }}
-					disabled={isLoading}
-					onClick={() => {
-						updateFiles();
-					}}
-				>
-					<RefreshIcon fontSize="inherit" />
-				</IconButton>
-			)}
+			<Box style={{ display: 'flex', alignItems: 'center', flexWrap: 'wrap', justifyContent: 'center' }}>
+				<AutodeskUser />
+				{/* {selectedFolder.folderName && (
+					<IconButton
+						size="large"
+						color="secondary"
+						// variant="outlined"
+						// sx={{ ml: 2, mt: 1 }}
+						disabled={isLoading}
+						onClick={() => {
+							updateFiles();
+						}}
+					>
+						<RefreshIcon fontSize="inherit" />
+					</IconButton>
+				)} */}
+			</Box>
 		</Box>
 	);
 };
