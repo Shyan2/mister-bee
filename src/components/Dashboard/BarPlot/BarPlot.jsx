@@ -27,8 +27,6 @@ const BarPlot = () => {
 		return a.Value - b.Value;
 	});
 
-	console.log(data);
-
 	const innerHeight = height - margin.top - margin.bottom;
 	const innerWidth = width - margin.left - margin.right;
 

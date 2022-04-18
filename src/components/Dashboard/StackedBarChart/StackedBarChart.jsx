@@ -26,11 +26,11 @@ const yAxisLabelOffset = 40;
 const StackedBarChart = () => {
 	const data = useData();
 
-	// useEffect(() => {
-	// 	if (data) {
-	// 		console.log(data);
-	// 	}
-	// }, [data]);
+	useEffect(() => {
+		if (data) {
+			console.log(data);
+		}
+	}, [data]);
 
 	if (!data) {
 		return <pre>Loading ...</pre>;
@@ -40,6 +40,7 @@ const StackedBarChart = () => {
 	const innerWidth = width - margin.left - margin.right;
 
 	const subgroups = data.columns.slice(1);
+	console.log(subgroups);
 
 	const groups = d3.map(data, function (d) {
 		return d.docType;

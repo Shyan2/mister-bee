@@ -5,15 +5,12 @@ import { AxisBottom } from './AxisBottom';
 import { AxisLeft } from './AxisLeft';
 import { Marks } from './Marks';
 
-const width = 960;
-const height = 500;
 const margin = {
 	top: 20,
 	right: 30,
 	bottom: 70,
 	left: 260,
 };
-const xAxisLabelOffset = 55;
 
 const Barchart = ({ width, height, data }) => {
 	// console.log(data);
@@ -25,10 +22,8 @@ const Barchart = ({ width, height, data }) => {
 	const innerHeight = height - margin.top - margin.bottom;
 	const innerWidth = width - margin.left - margin.right;
 
-	const yValue = (d) => d.DELIVER_UNIT;
+	const yValue = (d) => d.sender;
 	const xValue = (d) => d.Count;
-
-	const siFormat = format('.2s');
 
 	const yScale = scaleBand().domain(data.map(yValue)).range([0, innerHeight]).paddingInner(0.15);
 

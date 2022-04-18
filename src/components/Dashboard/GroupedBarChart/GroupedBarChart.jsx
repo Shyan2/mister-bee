@@ -71,7 +71,7 @@ const GroupedBarChart = () => {
 		.range([innerHeight, 0])
 		.nice();
 
-	const xScale = scaleBand().domain(data.map(xValue)).range([0, innerWidth]).padding(0.2);
+	// const xScale = scaleBand().domain(data.map(xValue)).range([0, innerWidth]).padding(0.2);
 
 	return (
 		<>

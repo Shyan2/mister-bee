@@ -1,5 +1,6 @@
 export const StackedMarks = ({ data, x, y, innerHeight, subgroups, colorScale }) =>
 	data.map((d) => {
+		console.log(d);
 		return (
 			<g key={d.key} transform={`translate(-25, 0)`}>
 				{d.map((key) => {

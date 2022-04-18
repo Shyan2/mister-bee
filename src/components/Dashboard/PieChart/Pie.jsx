@@ -60,7 +60,7 @@ const Pie = ({ data, innerRadius, outerRadius, innerWidth, innerHeight }) => {
 				第二次建設計劃
 			</Typography> */}
 			<Typography variant="h2" align="center">
-				【計劃經費 {format('.2f')(totalValue)} 億】
+				【計畫經費 {format('.2f')(totalValue)} 億】
 			</Typography>
 
 			<svg

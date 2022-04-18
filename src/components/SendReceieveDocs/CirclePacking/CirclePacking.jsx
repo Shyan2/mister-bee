@@ -9,10 +9,7 @@ import {
 	forceCenter,
 	forceCollide,
 	drag,
-	pointer,
 } from 'd3';
-
-import { nodes, links, MANY_BODY_STRENGTH } from './data';
 
 import * as d3 from 'd3';
 

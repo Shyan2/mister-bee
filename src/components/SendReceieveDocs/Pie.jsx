@@ -11,6 +11,9 @@ const margin = {
 	left: 30,
 };
 
+const innerRadius = 100;
+const outerRadius = 200;
+
 const Legend = ({ colorScale, tickSpacing = 20, tickSize = 10, tickTextOffset = 15 }) => {
 	const returnObject = colorScale.domain().map((domainValue, i) => {
 		// const returnObject = colorScale.map((domainValue, i) => {
@@ -37,8 +40,8 @@ const Arc = ({ data, index, createArc, colors, format }) => (
 	</g>
 );
 
-const Pie = ({ data, innerRadius, outerRadius, innerWidth, innerHeight }) => {
-	const colorValue = (d) => d.DELIVER_UNIT;
+const Pie = ({ data, innerWidth, innerHeight }) => {
+	const colorValue = (d) => d.docType;
 
 	const createPie = pie()
 		.value((d) => d.Count)
@@ -48,15 +51,13 @@ const Pie = ({ data, innerRadius, outerRadius, innerWidth, innerHeight }) => {
 	const pieData = createPie(data);
 	// #d8e6f0, #f9423a, #1e252b, #343e48, #d9d9d6, #efecea
 	// const colors = scaleOrdinal(schemeSet3);
-	const colorScale = scaleOrdinal()
-		.domain(data.map(colorValue))
-		.range(['#343e48', '#f9423a', '#d9d9d6', '#efecea', '#d8e6f0', '#1e252b', '#E6E6FA']);
+	const colorScale = scaleOrdinal().domain(data.map(colorValue)).range(['#343e48', '#f9423a']);
 
 	return (
 		<>
-			<Typography sx={{ mt: 2 }} variant="h2" align="center">
+			{/* <Typography sx={{ mt: 2 }} variant="h2" align="center">
 				【收文數量】
-			</Typography>
+			</Typography> */}
 
 			<svg
 				width={innerWidth}
@@ -70,13 +71,13 @@ const Pie = ({ data, innerRadius, outerRadius, innerWidth, innerHeight }) => {
 
 						{pieData.map((d, i) => {
 							// console.log(d);
-							return <Arc key={i} index={d.data.DELIVER_UNIT} data={d} createArc={createArc} colors={colorScale} />;
+							return <Arc key={i} index={d.data.docType} data={d} createArc={createArc} colors={colorScale} />;
 						})}
 					</g>
 					<g transform={`translate(${innerWidth - 250}, ${innerHeight / 2 - 100})`}>
-						<text x={35} y={-25} textAnchor="middle">
+						{/* <text x={35} y={-25} textAnchor="middle">
 							Legend
-						</text>
+						</text> */}
 						<Legend colorScale={colorScale} />
 					</g>
 				</g>

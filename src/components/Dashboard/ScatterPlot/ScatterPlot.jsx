@@ -25,7 +25,6 @@ const ScatterPlot = () => {
 	if (!data) {
 		return <pre>Loading ...</pre>;
 	}
-	console.log(data);
 
 	const innerHeight = height - margin.top - margin.bottom;
 	const innerWidth = width - margin.left - margin.right;

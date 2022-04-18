@@ -5,8 +5,8 @@ const columns = ['docType', '美商科進栢誠工程顧問有限公司台灣分
 
 const companyKeyMap = {
 	0: 'docType',
-	1: '美商科進栢誠工程顧問有限公司台灣分公司',
-	3: '內政部警政署警察通訊所通訊器材科',
+	1: '科進栢誠', // 美商科進栢誠工程顧問有限公司台灣分公司
+	3: '警政署材科', // 內政部警政署警察通訊所通訊器材科
 	4: '內政部警政署警察通訊所',
 	5: '臺灣銀行採購部',
 	8: '內政部警政署',
@@ -16,6 +16,8 @@ const companyKeyMap = {
 	12: '高雄市政府警察局',
 	13: '行政院公共工程委員會',
 	14: '三商電腦股份有限公司',
+	15: '中華電信企業客戶分公司',
+	16: '高雄85大樓管理中心',
 };
 
 const letterTypeMap = {
@@ -38,18 +40,30 @@ export const useData = () => {
 
 	const fetchSendData = async () => {
 		const result = await axios.get(`${SERVER_URL}/api/pmis/getsenddocs`);
-		console.log(result.data);
 		setSendData(result.data.recordset);
 	};
 
-	const processData = (data) => {
-		// replace some digits with the map
-		data.forEach((row) => {
-			// replace row.DELIEVER_UNIT, row.DELIVER_LETTER_TYPE
-			// fix time of RECEIEVE_DATA
-			row.DELIVER_UNIT = companyKeyMap[row.DELIVER_UNIT];
+	// Need 2 processData because Data in the database is not consistent...
+	const processData = async (data) => {
+		await data.forEach((row) => {
+			row.id = row.DELIVER_NO;
+			row.docType = '收文';
+			row.sender = companyKeyMap[row.DELIVER_UNIT];
+			row.receiver = companyKeyMap[1]; // could be multiple
+			// row.DELIVER_UNIT = companyKeyMap[row.DELIVER_UNIT];
 			row.DELIVER_LETTER_TYPE = letterTypeMap[row.DELIVER_LETTER_TYPE];
 			row.RECEIVE_DATE = new Date(row.RECEIVE_DATE);
+		});
+	};
+
+	const processSendData = async (data) => {
+		await data.forEach((row) => {
+			row.id = row.DELIVER_NUMBER;
+			row.docType = '發文';
+			row.sender = companyKeyMap[1];
+			row.receiver = companyKeyMap[row.RECE_NAME_TKEY];
+			row.DELIVER_LETTER_TYPE = letterTypeMap[row.DELIVER_LETTER_TYPE];
+			row.RECEIVE_DATE = new Date(row.DELIVER_DATE);
 		});
 	};
 
@@ -58,13 +72,16 @@ export const useData = () => {
 		fetchSendData();
 	}, []);
 
+	// 2 useEffects to reduce overlap executions
 	useEffect(() => {
-		if (receiveData) {
+		if (receiveData && sendData) {
 			// process data
 			processData(receiveData);
-			setData(receiveData);
+			processSendData(sendData);
+			setData([...receiveData, ...sendData]);
+			// setData(...new Set([...receiveData, ...sendData]));
 		}
-	}, [receiveData]);
+	}, [receiveData, sendData]);
 
 	return data;
 };

@@ -103,41 +103,48 @@ function QuickSearchToolbar(props) {
 const DataTable = ({ data }) => {
 	// console.log(data);
 	const [columns] = useState([
-		// {
-		// 	field: 'SUBJECT',
-		// 	headerName: '主旨',
-		// 	flex: 1,
-		// 	minWidth: 200,
-		// 	headerClassName: 'header-theme',
-		// 	// hide: true,
-		// },
 		{
-			field: 'DELIVER_NO',
-			headerName: '來文文號',
-			width: 300,
+			field: 'docType',
+			headerName: '類型',
+			minWidth: 70,
+			headerClassName: 'header-theme',
+			// hide: true,
+		},
+		{
+			field: 'id',
+			headerName: '文號',
+			flex: 1,
 			headerClassName: 'header-theme',
 			// hide: true,
 		},
 		// { field: 'id', headerName: 'ID', width: 90 },
 
 		{
-			field: 'DELIVER_UNIT',
-			headerName: '來文單位',
+			field: 'sender',
+			headerName: '發文單位',
 			flex: 1,
 			sortable: true,
 			headerClassName: 'header-theme',
 		},
 		{
+			field: 'receiver',
+			headerName: '收文單位',
+			flex: 1,
+			sortable: true,
+			headerClassName: 'header-theme',
+		},
+
+		{
 			field: 'DELIVER_LETTER_TYPE',
-			headerName: '公文類型',
-			width: 150,
+			headerName: '類型',
+			width: 100,
 			headerClassName: 'header-theme',
 		},
 
 		{
 			field: 'RECEIVE_DATE',
-			headerName: '來文日期',
-			width: 150,
+			headerName: '日期',
+			width: 120,
 			headerClassName: 'header-theme',
 			valueFormatter: (params) => moment(params.value).format('YYYY/MM/DD'),
 		},
@@ -177,7 +184,9 @@ const DataTable = ({ data }) => {
 		},
 	]);
 
-	const searchFilter = ({ DELIVER_LETTER_TYPE, DELIVER_NO, DELIVER_UNIT, SUBJECT }) => ({
+	const searchFilter = ({ docType, id, DELIVER_LETTER_TYPE, DELIVER_NO, DELIVER_UNIT, SUBJECT }) => ({
+		docType,
+		id,
 		DELIVER_LETTER_TYPE,
 		DELIVER_NO,
 		DELIVER_UNIT,
@@ -197,7 +206,7 @@ const DataTable = ({ data }) => {
 	useEffect(() => {
 		setRows(data);
 	}, [data]);
-	console.log(rows);
+
 	return (
 		<Box
 			style={{ height: '75vh', width: '100%' }}
@@ -210,7 +219,7 @@ const DataTable = ({ data }) => {
 			}}
 		>
 			<DataGrid
-				getRowId={(row) => row.RECEIVER_NO}
+				getRowId={(row) => row.id}
 				aria-label="File Data Grid"
 				localeText={localizedTextsMap}
 				// localeText={zhCN.components.MuiDataGrid.defaultProps.localeText}

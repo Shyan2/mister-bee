@@ -1,4 +1,4 @@
-import React, { useEffect, useContext } from 'react';
+import React, { useState, useEffect, useContext } from 'react';
 import { DateRangeContext } from './Context';
 import { Grid, Typography, IconButton } from '@mui/material';
 import { timeFormat } from 'd3';
@@ -17,14 +17,35 @@ const dateFormattingFunction = timeFormat('%m/%d/%Y');
 const InfoCards = ({ data, brushExtent }) => {
 	const { selectedDateRange } = useContext(DateRangeContext);
 
-	const card = (count) => {
+	const [dataCount, setDataCount] = useState({});
+
+	useEffect(() => {
+		const receiveCount = data.filter((obj) => obj.docType === '收文').length;
+		const allDataCount = data.length;
+		setDataCount({
+			length: allDataCount,
+			receiveCount: receiveCount,
+			sentCount: allDataCount - receiveCount,
+		});
+	}, [data]);
+
+	const card = () => {
 		return (
 			<Box style={{ display: 'flex', alignItems: 'center', flexWrap: 'wrap' }}>
+				{/* <Box sx={{ mr: 3 }}>
+					<Typography variant="h4" fontWeight="bold" color="#1e252b">
+						收文: {dataCount.receiveCount}
+					</Typography>
+					<Typography variant="h4" fontWeight="bold" color="#f9423a">
+						發文: {dataCount.sentCount}
+					</Typography>
+				</Box> */}
+
 				<IconButton disabled>
 					<AddCircleIcon />
 				</IconButton>
 				<Typography variant="h4" color="text.secondary">
-					Total: {count}
+					Total: {dataCount.length}
 				</Typography>
 			</Box>
 		);
@@ -64,7 +85,7 @@ const InfoCards = ({ data, brushExtent }) => {
 				</Grid>
 				<Grid item xs={4}>
 					{/* <Card variant="outlined">{card(data.length)}</Card> */}
-					{card(data.length)}
+					{card()}
 				</Grid>
 			</Grid>
 		</>

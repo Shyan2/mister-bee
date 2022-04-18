@@ -3,6 +3,7 @@ import { DateRangeContext } from './Context';
 import { Typography, Box, Container, Grid } from '@mui/material';
 import { useData } from './useData';
 
+import StackedDateHistogram from './StackedDateHistogram/StackedDateHistogram';
 import DateHistogram from './DateHistogram/DateHistogram';
 import InfoCards from './InfoCards';
 import Pie from './Pie';
@@ -14,8 +15,6 @@ import { useWindowSize } from './useWindowSize';
 
 const width = 750;
 const height = 400;
-const innerRadius = 100;
-const outerRadius = 200;
 
 const sizeValue = (d) => d['Count'];
 const maxRadius = 100;
@@ -24,10 +23,10 @@ const dateHistogramSize = 0.2;
 const xValue = (d) => d['RECEIVE_DATE'];
 
 const margin = {
-	top: 50,
-	right: 5,
-	bottom: 30,
-	left: 10,
+	top: 0,
+	right: 0,
+	bottom: 0,
+	left: 0,
 };
 
 const SendReceieveDocs = () => {
@@ -65,8 +64,19 @@ const SendReceieveDocs = () => {
 		let result = [];
 		if (inputData) {
 			inputData.forEach((item) => {
-				let resObj = result.find((resObj) => resObj.DELIVER_UNIT === item.DELIVER_UNIT);
-				resObj ? resObj.Count++ : result.push({ DELIVER_UNIT: item.DELIVER_UNIT, Count: 1 });
+				let resObj = result.find((resObj) => resObj.docType === item.docType);
+				resObj ? resObj.Count++ : result.push({ docType: item.docType, Count: 1 });
+			});
+		}
+		return result;
+	};
+
+	const ProcessBarData = (inputData) => {
+		let result = [];
+		if (inputData) {
+			inputData.forEach((item) => {
+				let resObj = result.find((resObj) => resObj.sender === item.sender);
+				resObj ? resObj.Count++ : result.push({ sender: item.sender, Count: 1 });
 			});
 		}
 		return result;
@@ -102,8 +112,16 @@ const SendReceieveDocs = () => {
 			<DateRangeContext.Provider value={selectedDateRangeValue}>
 				<Grid container spacing={2}>
 					<Grid item sm={12}>
-						<DateHistogram
+						{/* <DateHistogram
 							className="dateHistogram"
+							data={data}
+							height={dateHistogramSize * height}
+							width={windowWidth - 100}
+							xValue={xValue}
+							setBrushExtent={setBrushExtent}
+						/> */}
+						<StackedDateHistogram
+							className="stackedDateHistogram"
 							data={data}
 							height={dateHistogramSize * height}
 							width={windowWidth - 100}
@@ -119,38 +137,30 @@ const SendReceieveDocs = () => {
 								sx={{ mt: 1 }}
 								style={{ display: 'flex', alignItems: 'center', flexWrap: 'wrap', justifyContent: 'center' }}
 							>
+								<Box style={{ display: 'flex', alignItems: 'center', flexWrap: 'wrap', justifyContent: 'center' }}>
+									<Typography variant="h3" fontWeight="bold">
+										公文類型
+									</Typography>
+								</Box>
+								<div id="container">
+									<svg id="container-svg" width={innerWidth} height={innerHeight}></svg>
+									<div id="tooltip"></div>
+								</div>
 								<Typography variant="h3" fontWeight="bold">
-									來文單位
+									發文單位
 								</Typography>
 							</Box>
 
-							<Barchart width={innerWidth} height={innerHeight} data={ProcessPieData(filteredData)} />
-							<Box style={{ display: 'flex', alignItems: 'center', flexWrap: 'wrap', justifyContent: 'center' }}>
-								<Typography variant="h3" fontWeight="bold">
-									公文類型
-								</Typography>
-							</Box>
-							<div id="container">
-								<svg id="container-svg" width={innerWidth} height={innerHeight}></svg>
-								<div id="tooltip"></div>
-							</div>
+							<Barchart width={innerWidth} height={innerHeight} data={ProcessBarData(filteredData)} />
 						</Box>
 					</Grid>
 					<Grid item sm={12} md={12} lg={12} xl={7}>
 						<DataTable data={filteredData} />
 					</Grid>
 
-					{/* <Grid item xs={8} md={6}>
-						<Pie
-							data={ProcessPieData(filteredData)}
-							width={innerWidth}
-							height={innerHeight}
-							innerWidth={innerWidth}
-							innerHeight={innerHeight}
-							innerRadius={innerRadius}
-							outerRadius={outerRadius}
-						/>
-					</Grid> */}
+					<Grid item xs={8} md={6}>
+						<Pie data={ProcessPieData(filteredData)} innerWidth={innerWidth} innerHeight={innerHeight} />
+					</Grid>
 
 					{/* <Grid item sm={12} md={6} lg={6}></Grid>
 
