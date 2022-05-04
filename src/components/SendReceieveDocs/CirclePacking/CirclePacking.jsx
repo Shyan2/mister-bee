@@ -14,7 +14,7 @@ import {
 import * as d3 from 'd3';
 
 const sizeDivisor = 5;
-const nodePadding = 4.5;
+const nodePadding = 3.5;
 
 const CirclePacking = ({ data, width, height }) => {
 	data = data.sort(function (a, b) {

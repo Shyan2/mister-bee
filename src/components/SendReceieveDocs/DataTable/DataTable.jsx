@@ -106,7 +106,7 @@ const DataTable = ({ data }) => {
 		{
 			field: 'docType',
 			headerName: '類型',
-			minWidth: 70,
+			width: 60,
 			headerClassName: 'header-theme',
 			// hide: true,
 		},
@@ -137,41 +137,41 @@ const DataTable = ({ data }) => {
 		{
 			field: 'DELIVER_LETTER_TYPE',
 			headerName: '類型',
-			width: 100,
+			width: 80,
 			headerClassName: 'header-theme',
 		},
 
 		{
 			field: 'RECEIVE_DATE',
 			headerName: '日期',
-			width: 120,
+			width: 100,
 			headerClassName: 'header-theme',
 			valueFormatter: (params) => moment(params.value).format('YYYY/MM/DD'),
 		},
-		{
-			field: 'view',
-			headerName: '預覽',
-			width: 100,
-			headerClassName: 'header-theme',
-			sortable: false,
-			renderCell: (params) => {
-				return (
-					<div>
-						<IconButton
-							variant="contained"
-							size="small"
-							style={{ marginLeft: 16 }}
-							onClick={() => {
-								console.log(params.row);
-							}}
-						>
-							{/* 預覽 */}
-							<PreviewIcon color="primary" />
-						</IconButton>
-					</div>
-				);
-			},
-		},
+		// {
+		// 	field: 'view',
+		// 	headerName: '預覽',
+		// 	width: 100,
+		// 	headerClassName: 'header-theme',
+		// 	sortable: false,
+		// 	renderCell: (params) => {
+		// 		return (
+		// 			<div>
+		// 				<IconButton
+		// 					variant="contained"
+		// 					size="small"
+		// 					style={{ marginLeft: 16 }}
+		// 					onClick={() => {
+		// 						console.log(params.row);
+		// 					}}
+		// 				>
+		// 					{/* 預覽 */}
+		// 					<PreviewIcon color="primary" />
+		// 				</IconButton>
+		// 			</div>
+		// 		);
+		// 	},
+		// },
 	]);
 
 	const [searchText, setSearchText] = useState('');

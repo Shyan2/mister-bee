@@ -1,8 +1,6 @@
 import { useState, useEffect } from 'react';
 import axios from 'axios';
 
-const columns = ['docType', '美商科進栢誠工程顧問有限公司台灣分公司', '3', '4', '5', '8', '12', '13', '14'];
-
 const companyKeyMap = {
 	0: 'docType',
 	1: '科進栢誠', // 美商科進栢誠工程顧問有限公司台灣分公司
@@ -27,50 +25,83 @@ const letterTypeMap = {
 };
 
 const SERVER_URL = 'http://104.155.232.74:8080';
+const PROJECTID = '2800397A';
 
 export const useData = () => {
 	const [receiveData, setReceiveData] = useState(null);
 	const [sendData, setSendData] = useState(null);
 	const [data, setData] = useState(null);
 
+	const [companyDataMap, setCompanyDataMap] = useState(null);
+	const [letterType, setLetterType] = useState(null);
+
+	const fetchLetterType = async () => {
+		const result = await axios.get(`${SERVER_URL}/api/pmis/comp/getType?projectId=${PROJECTID}`);
+		let letterMap = {};
+		result.data.map((item) => {
+			letterMap[item.TKEY] = item.LETTER;
+		});
+		// console.log(letterMap);
+		setLetterType(letterMap);
+	};
+
+	const fetchCompanyData = async () => {
+		const result = await axios.get(`${SERVER_URL}/api/pmis/comp/getComp?projectId=${PROJECTID}`);
+		let companyMap = {};
+		result.data.map((item) => {
+			companyMap[item.TKEY] = item.comp_name;
+		});
+		// console.log(companyMap);
+		setCompanyDataMap(companyMap);
+	};
+
+	// need to send the project ID
 	const fetchReceieveData = async () => {
-		const result = await axios.get(`${SERVER_URL}/api/pmis/getreceivedocs`);
+		const result = await axios.get(`${SERVER_URL}/api/pmis/getreceivedocs?projectId=${PROJECTID}`);
 		setReceiveData(result.data.recordset);
+		// console.log(result.data.recordset);
 	};
 
 	const fetchSendData = async () => {
-		const result = await axios.get(`${SERVER_URL}/api/pmis/getsenddocs`);
+		const result = await axios.get(`${SERVER_URL}/api/pmis/getsenddocs?projectId=${PROJECTID}`);
 		setSendData(result.data.recordset);
 	};
 
 	// Need 2 processData because Data in the database is not consistent...
 	const processData = async (data) => {
 		await data.forEach((row) => {
-			row.id = row.DELIVER_NO;
 			row.docType = '收文';
-			row.sender = companyKeyMap[row.DELIVER_UNIT];
-			row.receiver = companyKeyMap[1]; // could be multiple
+			row.id = row.DELIVER_NO;
+			row.sender = companyDataMap[row.DELIVER_UNIT];
+			row.receiver = companyDataMap[1]; // could be multiple
 			// row.DELIVER_UNIT = companyKeyMap[row.DELIVER_UNIT];
-			row.DELIVER_LETTER_TYPE = letterTypeMap[row.DELIVER_LETTER_TYPE];
+			row.DELIVER_LETTER_TYPE = letterType[row.DELIVER_LETTER_TYPE];
 			row.RECEIVE_DATE = new Date(row.RECEIVE_DATE);
 		});
 	};
 
 	const processSendData = async (data) => {
 		await data.forEach((row) => {
-			row.id = row.DELIVER_NUMBER;
 			row.docType = '發文';
-			row.sender = companyKeyMap[1];
-			row.receiver = companyKeyMap[row.RECE_NAME_TKEY];
-			row.DELIVER_LETTER_TYPE = letterTypeMap[row.DELIVER_LETTER_TYPE];
+			row.id = row.DELIVER_NUMBER;
+			row.sender = companyDataMap[1];
+			row.receiver = companyDataMap[row.RECE_NAME_TKEY];
+			row.DELIVER_LETTER_TYPE = letterType[row.DELIVER_LETTER_TYPE];
 			row.RECEIVE_DATE = new Date(row.DELIVER_DATE);
 		});
 	};
 
 	useEffect(() => {
-		fetchReceieveData();
-		fetchSendData();
+		fetchCompanyData();
+		fetchLetterType();
 	}, []);
+
+	useEffect(() => {
+		if (companyDataMap && letterType) {
+			fetchReceieveData();
+			fetchSendData();
+		}
+	}, [companyDataMap, letterType]);
 
 	// 2 useEffects to reduce overlap executions
 	useEffect(() => {

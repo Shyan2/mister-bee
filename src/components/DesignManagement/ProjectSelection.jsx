@@ -153,7 +153,7 @@ const ProjectSelection = ({ selectedProject, setSelectedProject, selectedFolder,
 			</Box>
 			<Box style={{ display: 'flex', alignItems: 'center', flexWrap: 'wrap', justifyContent: 'center' }}>
 				<AutodeskUser />
-				{/* {selectedFolder.folderName && (
+				{selectedFolder.folderName && (
 					<IconButton
 						size="large"
 						color="secondary"
@@ -166,7 +166,7 @@ const ProjectSelection = ({ selectedProject, setSelectedProject, selectedFolder,
 					>
 						<RefreshIcon fontSize="inherit" />
 					</IconButton>
-				)} */}
+				)}
 			</Box>
 		</Box>
 	);

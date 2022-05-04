@@ -13,13 +13,14 @@ import DataTable from './DataTable/DataTable';
 import { scaleSqrt, max } from 'd3';
 import { useWindowSize } from './useWindowSize';
 
-const width = 750;
-const height = 400;
+const width = 700;
+const height = 300;
 
 const sizeValue = (d) => d['Count'];
-const maxRadius = 100;
+const maxRadius = 50;
+const minRadius = 10;
 
-const dateHistogramSize = 0.2;
+const dateHistogramSize = 0.1;
 const xValue = (d) => d['RECEIVE_DATE'];
 
 const margin = {
@@ -99,67 +100,74 @@ const SendReceieveDocs = () => {
 			result.forEach((item) => {
 				// item.size = +item.Count / 2;
 				// item.size < 3 ? (item.radius = 3) : (item.radius = item.size);
-				item.radius = sizeScale(sizeValue(item));
+				const tempRadius = sizeScale(sizeValue(item));
+				tempRadius > minRadius ? (item.radius = tempRadius) : (item.radius = minRadius);
+
+				//prevent the circle from being too small
+				// if (tempRadius > minRadius) {
+				// 	item.radius = tempRadius;
+				// } else {
+				// 	item.radius = minRadius;
+				// }
+
 				finalResult.push(item);
 			});
 		}
-
 		return finalResult;
 	};
 
 	return (
-		<Box sx={{ ml: 2, mt: 2 }}>
+		<Box sx={{ ml: 1, mt: 1, mr: 1 }}>
 			<DateRangeContext.Provider value={selectedDateRangeValue}>
+				<StackedDateHistogram
+					className="stackedDateHistogram"
+					data={data}
+					height={dateHistogramSize * windowHeight}
+					width={windowWidth - 100}
+					xValue={xValue}
+					setBrushExtent={setBrushExtent}
+				/>
 				<Grid container spacing={2}>
-					<Grid item sm={12}>
-						{/* <DateHistogram
-							className="dateHistogram"
-							data={data}
-							height={dateHistogramSize * height}
-							width={windowWidth - 100}
-							xValue={xValue}
-							setBrushExtent={setBrushExtent}
-						/> */}
-						<StackedDateHistogram
-							className="stackedDateHistogram"
-							data={data}
-							height={dateHistogramSize * height}
-							width={windowWidth - 100}
-							xValue={xValue}
-							setBrushExtent={setBrushExtent}
-						/>
-					</Grid>
-
-					<Grid item sm={12} md={12} lg={5}>
-						<Box sx={{ mt: 0.5 }}>
-							<InfoCards data={filteredData} brushExtent={brushExtent} />
-							<Box
-								sx={{ mt: 1 }}
-								style={{ display: 'flex', alignItems: 'center', flexWrap: 'wrap', justifyContent: 'center' }}
-							>
-								<Box style={{ display: 'flex', alignItems: 'center', flexWrap: 'wrap', justifyContent: 'center' }}>
-									<Typography variant="h3" fontWeight="bold">
+					<Grid item sm={5}>
+						<InfoCards data={filteredData} brushExtent={brushExtent} />
+						<Grid container>
+							<Grid item lg={6}>
+								<Box
+									sx={{ mt: 1 }}
+									style={{ display: 'flex', alignItems: 'center', flexWrap: 'wrap', justifyContent: 'center' }}
+								>
+									<Typography variant="h4" fontWeight="bold">
 										公文類型
 									</Typography>
-								</Box>
-								<div id="container">
-									<svg id="container-svg" width={innerWidth} height={innerHeight}></svg>
-									<div id="tooltip"></div>
-								</div>
-								<Typography variant="h3" fontWeight="bold">
-									發文單位
-								</Typography>
-							</Box>
 
+									<div id="container">
+										<svg id="container-svg" width={innerWidth} height={windowHeight / 3.5}></svg>
+										<div id="tooltip"></div>
+									</div>
+								</Box>
+							</Grid>
+
+							<Grid item lg={6}>
+								<Typography
+									style={{ display: 'flex', alignItems: 'center', flexWrap: 'wrap', justifyContent: 'center' }}
+									variant="h4"
+									fontWeight="bold"
+								>
+									收發文數量
+								</Typography>
+								<Pie data={ProcessPieData(filteredData)} innerWidth={innerWidth} innerHeight={windowHeight / 3.5} />
+							</Grid>
+						</Grid>
+
+						<Box style={{ display: 'flex', alignItems: 'center', flexWrap: 'wrap', justifyContent: 'center' }}>
+							<Typography variant="h4" fontWeight="bold">
+								發文單位
+							</Typography>
 							<Barchart width={innerWidth} height={innerHeight} data={ProcessBarData(filteredData)} />
 						</Box>
 					</Grid>
-					<Grid item sm={12} md={12} lg={12} xl={7}>
+					<Grid item sm={12} md={12} lg={7} xl={7}>
 						<DataTable data={filteredData} />
-					</Grid>
-
-					<Grid item xs={8} md={6}>
-						<Pie data={ProcessPieData(filteredData)} innerWidth={innerWidth} innerHeight={innerHeight} />
 					</Grid>
 
 					{/* <Grid item sm={12} md={6} lg={6}></Grid>
@@ -167,7 +175,7 @@ const SendReceieveDocs = () => {
 					<Grid item sm={12} md={6} lg={6}></Grid> */}
 				</Grid>
 
-				<CirclePacking data={ProcessCirclesData(filteredData)} width={innerWidth} height={innerHeight} />
+				<CirclePacking data={ProcessCirclesData(filteredData)} width={innerWidth} height={windowHeight / 3.5} />
 			</DateRangeContext.Provider>
 		</Box>
 	);

@@ -45,7 +45,7 @@ const InfoCards = ({ data, brushExtent }) => {
 					<AddCircleIcon />
 				</IconButton>
 				<Typography variant="h4" color="text.secondary">
-					Total: {dataCount.length}
+					Total: {dataCount.length}; 收文: {dataCount.receiveCount}; 發文: {dataCount.sentCount}
 				</Typography>
 			</Box>
 		);
@@ -67,7 +67,7 @@ const InfoCards = ({ data, brushExtent }) => {
 	return (
 		<>
 			<Grid container>
-				<Grid item xs={8}>
+				<Grid item xs={6}>
 					{brushExtent ? (
 						<>
 							{dateCard(dateFormattingFunction(brushExtent[0]), dateFormattingFunction(brushExtent[1]))}
@@ -83,7 +83,7 @@ const InfoCards = ({ data, brushExtent }) => {
 						</>
 					)}
 				</Grid>
-				<Grid item xs={4}>
+				<Grid item xs={6}>
 					{/* <Card variant="outlined">{card(data.length)}</Card> */}
 					{card()}
 				</Grid>

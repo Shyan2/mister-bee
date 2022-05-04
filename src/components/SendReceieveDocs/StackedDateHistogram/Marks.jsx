@@ -1,3 +1,4 @@
+import { format } from 'd3';
 export const Marks = ({ data, xScale, yScale, innerHeight }) =>
 	data.map((d, i) => {
 		// i++;
@@ -6,12 +7,13 @@ export const Marks = ({ data, xScale, yScale, innerHeight }) =>
 		return (
 			<g key={i}>
 				<defs>
+					{sendPercent}
 					<linearGradient id={'MyGradient' + i} x2="0%" y2="100%">
 						<stop offset={sendPercent + '%'} stopColor="#f9423a" />
-						<stop offset={'0% ' + receivePercent + '%'} stopColor="#1e252b" />
+						<stop offset={sendPercent + '%'} stopColor="#343e48" />
+						<stop offset={receivePercent} stopColor="#343e48" />
 					</linearGradient>
 				</defs>
-				{/* send rect */}
 				<rect
 					key={i}
 					x={xScale(d.x0)}
