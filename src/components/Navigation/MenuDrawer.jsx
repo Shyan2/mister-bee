@@ -91,7 +91,14 @@ const MenuDrawer = ({ open }) => {
 						<ListItemIcon>
 							<FeedIcon />
 						</ListItemIcon>
-						<ListItemText>收發文</ListItemText>
+						<ListItemText>收發文 Insights</ListItemText>
+					</ListItem>
+
+					<ListItem button key={'Issues'} component={Link} to="/issues">
+						<ListItemIcon>
+							<DesignServicesIcon />
+						</ListItemIcon>
+						<ListItemText>Issues</ListItemText>
 					</ListItem>
 				</List>
 			</Box>

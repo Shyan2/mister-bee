@@ -54,11 +54,10 @@ function DesignManagement() {
 					}
 
 					// want to batch process the data, so need to call the postBatchIndexes with all the versions from above
-
 					console.log(result.data);
 					let versions = [];
 					result.data.map((item) => {
-						// need to filter. Only allow .rvt and .nwd files.
+						// need to filter. Only allow .rvt
 						if (item.name.substring(item.name.length - 4) === '.rvt') {
 							// console.log(item.name);
 							versions.push({
@@ -66,7 +65,7 @@ function DesignManagement() {
 							});
 						}
 					});
-					console.log(versions);
+					// console.log(versions);
 					const versionResult = await axios.post(
 						`${SERVER_URL}/api/forge/modelproperties/postBatchIndexes?projectID=${selectedProject.projectID}`,
 						{
@@ -79,7 +78,7 @@ function DesignManagement() {
 						},
 					);
 
-					console.log(versionResult.data.indexes);
+					// console.log(versionResult.data.indexes);
 
 					result.data.forEach((item) => {
 						// match versions and items. Optional chaining because versionResult may be undefined

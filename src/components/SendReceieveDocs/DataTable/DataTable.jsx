@@ -184,12 +184,10 @@ const DataTable = ({ data }) => {
 		},
 	]);
 
-	const searchFilter = ({ docType, id, DELIVER_LETTER_TYPE, DELIVER_NO, DELIVER_UNIT, SUBJECT }) => ({
+	const searchFilter = ({ docType, id, DELIVER_LETTER_TYPE, SUBJECT }) => ({
 		docType,
 		id,
 		DELIVER_LETTER_TYPE,
-		DELIVER_NO,
-		DELIVER_UNIT,
 		SUBJECT,
 	});
 	const requestSearch = (searchValue) => {

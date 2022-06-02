@@ -31,7 +31,7 @@ const InfoCards = ({ data, brushExtent }) => {
 
 	const card = () => {
 		return (
-			<Box style={{ display: 'flex', alignItems: 'center', flexWrap: 'wrap' }}>
+			<Box style={{ display: 'flex', alignItems: 'center', flexWrap: 'wrap', justifyContent: 'center' }}>
 				{/* <Box sx={{ mr: 3 }}>
 					<Typography variant="h4" fontWeight="bold" color="#1e252b">
 						收文: {dataCount.receiveCount}
@@ -44,7 +44,7 @@ const InfoCards = ({ data, brushExtent }) => {
 				<IconButton disabled>
 					<AddCircleIcon />
 				</IconButton>
-				<Typography variant="h4" color="text.secondary">
+				<Typography variant="h4" color="text.secondary" fontSize="1.1rem">
 					Total: {dataCount.length}; 收文: {dataCount.receiveCount}; 發文: {dataCount.sentCount}
 				</Typography>
 			</Box>
@@ -57,7 +57,7 @@ const InfoCards = ({ data, brushExtent }) => {
 				<IconButton disabled>
 					<DateRangeIcon />
 				</IconButton>
-				<Typography variant="h4" color="text.secondary">
+				<Typography variant="h4" color="text.secondary" fontSize="1.1rem">
 					{startDate} ~ {endDate}
 				</Typography>
 			</Box>

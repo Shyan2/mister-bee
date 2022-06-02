@@ -148,14 +148,19 @@ const SendReceieveDocs = () => {
 							</Grid>
 
 							<Grid item lg={6}>
-								<Typography
+								<Box
+									sx={{ mt: 1 }}
 									style={{ display: 'flex', alignItems: 'center', flexWrap: 'wrap', justifyContent: 'center' }}
-									variant="h4"
-									fontWeight="bold"
 								>
-									收發文數量
-								</Typography>
-								<Pie data={ProcessPieData(filteredData)} innerWidth={innerWidth} innerHeight={windowHeight / 3.5} />
+									<Typography
+										style={{ display: 'flex', alignItems: 'center', flexWrap: 'wrap', justifyContent: 'center' }}
+										variant="h4"
+										fontWeight="bold"
+									>
+										收發文數量
+									</Typography>
+									<Pie data={ProcessPieData(filteredData)} innerWidth={innerWidth} innerHeight={windowHeight / 3.5} />
+								</Box>
 							</Grid>
 						</Grid>
 
@@ -166,7 +171,7 @@ const SendReceieveDocs = () => {
 							<Barchart width={innerWidth} height={innerHeight} data={ProcessBarData(filteredData)} />
 						</Box>
 					</Grid>
-					<Grid item sm={12} md={12} lg={7} xl={7}>
+					<Grid item sm={12} md={7} lg={7} xl={7}>
 						<DataTable data={filteredData} />
 					</Grid>
 
