@@ -15,7 +15,7 @@ import Dashboard from './components/Dashboard/Dashboard';
 import ModelProperties from './components/ModelProperties/ModelProperties';
 import NotLoggedIn from './components/Error/NotLoggedIn';
 import SendReceiveDocs from './components/SendReceieveDocs/SendReceieveDocs';
-import Issues from './components/Issues/Issues';
+import Markups from './components/Markups/Markups';
 
 import './App.css';
 const App = () => {
@@ -38,7 +38,7 @@ const App = () => {
 									<Route path="/dashboard" element={<Dashboard />} />
 									<Route path="/modelproperties" element={<ModelProperties />} />
 									<Route path="/sendReceiveDocs" element={<SendReceiveDocs />} />
-									<Route path="/issues" element={<Issues />} />
+									<Route path="/markups" element={<Markups />} />
 								</>
 							)}
 							<Route path="/" element={<Home />} />

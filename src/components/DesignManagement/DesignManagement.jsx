@@ -1,12 +1,19 @@
 import { useState, useEffect, useMemo } from 'react';
 import { SelectedObjectContext, ModelPropertiesContext } from './Context';
 import { Box, CircularProgress } from '@mui/material';
+import Tabs from '@mui/material/Tabs';
+import Tab from '@mui/material/Tab';
+import TabPanel from '@mui/lab/TabPanel';
+import TabContext from '@mui/lab/TabContext';
+import TabList from '@mui/lab/TabList';
 
 import DesignTable from './DesignTable';
 import Viewer from './Viewer';
+import ListMarkups from './DesignMarkups/ListMarkups';
 import Compare2d from './Compare2d';
 import ProjectSelection from './ProjectSelection';
 import Insights from './Insights/Insights';
+import DesignMarkups from './DesignMarkups/DesignMarkups';
 
 import moment from 'moment';
 import axios from 'axios';
@@ -14,6 +21,12 @@ import axios from 'axios';
 const SERVER_URL = process.env.REACT_APP_API_ROUTE;
 
 function DesignManagement() {
+	const [value, setValue] = useState('one');
+
+	const handleChange = (event, newValue) => {
+		setValue(newValue);
+	};
+
 	const [isLoading, setIsLoading] = useState(false);
 	const [items, setItems] = useState([]);
 
@@ -110,27 +123,53 @@ function DesignManagement() {
 			setItems([]);
 		}
 	}, [selectedProject, selectedFolder]);
-
 	return (
 		<Box sx={{ m: 2 }}>
 			<SelectedObjectContext.Provider value={selectedObjectValue}>
 				<ModelPropertiesContext.Provider value={selectedModelPropsValue}>
 					<ProjectSelection {...{ selectedProject, setSelectedProject, selectedFolder, setSelectedFolder }} />
-
-					<Box
-						sx={{ m: 0 }}
-						style={{
-							height: '75vh',
-							display: !selectedObject.id && !selectedModelProps.indexId ? 'flex' : 'none',
-							justifyContent: 'center',
-							alignItems: 'center',
-						}}
-					>
-						{!items ? <CircularProgress /> : <DesignTable items={items} isLoading={isLoading} />}
-					</Box>
+					<TabContext value={value}>
+						<Tabs
+							value={value}
+							onChange={handleChange}
+							textColor="secondary"
+							indicatorColor="secondary"
+							aria-label="secondary tabs example"
+						>
+							<Tab value="one" label="Models" />
+							<Tab value="two" label="Markups" />
+						</Tabs>
+						<TabPanel value="one">
+							<Box
+								sx={{ m: 0 }}
+								style={{
+									height: '75vh',
+									display: !selectedObject.id && !selectedModelProps.indexId ? 'flex' : 'none',
+									justifyContent: 'center',
+									alignItems: 'center',
+								}}
+							>
+								{!items ? <CircularProgress /> : <DesignTable items={items} isLoading={isLoading} />}
+							</Box>
+						</TabPanel>
+						<TabPanel value="two">
+							<Box
+								sx={{ m: 0 }}
+								style={{
+									height: '75vh',
+									display: !selectedObject.id && !selectedModelProps.indexId ? 'flex' : 'none',
+									justifyContent: 'center',
+									alignItems: 'center',
+								}}
+							>
+								<DesignMarkups />
+							</Box>
+						</TabPanel>
+					</TabContext>
 
 					{selectedObject.compareView && <Compare2d projectID={selectedProject.projectID} />}
 					{selectedObject.simpleView && <Viewer />}
+					{selectedObject.markupView && <ListMarkups selectedObject={selectedObject} />}
 					{selectedModelProps.indexId && <Insights projectId={selectedProject.projectID} />}
 				</ModelPropertiesContext.Provider>
 			</SelectedObjectContext.Provider>

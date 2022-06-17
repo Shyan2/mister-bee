@@ -1,21 +1,35 @@
 /* global Autodesk */
-import React, { useState, useEffect, useRef } from 'react';
+import React, { useState, useEffect, useRef, useContext } from 'react';
 import axios from 'axios';
+import { SelectedObjectContext } from './Context';
+import { AppBar, Box, IconButton, Toolbar, Typography } from '@mui/material';
+import ArrowBackIcon from '@mui/icons-material/ArrowBack';
+
 const SERVER_URL = process.env.REACT_APP_API_ROUTE;
 
 const AV = Autodesk.Viewing;
 
 const Viewer = (props) => {
-	const [urn] = useState('dXJuOmFkc2sud2lwcHJvZDpmcy5maWxlOnZmLmtwSlBBZWxjUXFHMU1SUjVBeC1WNmc_dmVyc2lvbj01');
-	//   const { urn } = useContext(UrnContext);
+	const { selectedObject, setSelectedObject } = useContext(SelectedObjectContext);
+
+	const urn = selectedObject.urn;
 	const [accessToken, setAccessToken] = useState(null);
+
 	useEffect(() => {
 		const getNewToken = async () => {
 			const newToken = await axios.get(`${SERVER_URL}/api/forge/getToken`);
 			setAccessToken(newToken.data.access_token);
 		};
 		getNewToken();
-	}, []);
+
+		if (accessToken && urn) {
+			initializeViewer();
+		}
+
+		if (viewerRef.current) {
+			viewerRef.current.finish();
+		}
+	}, [urn, accessToken]);
 
 	const viewerRef = useRef(null);
 	const viewerDomRef = useRef(null);
@@ -39,7 +53,9 @@ const Viewer = (props) => {
 
 		AV.Initializer(viewerOptions, async () => {
 			Autodesk.Viewing.Private.InitParametersSetting.alpha = true;
-			const viewer = new Autodesk.Viewing.GuiViewer3D(viewerDomRef.current);
+			const viewer = new Autodesk.Viewing.GuiViewer3D(viewerDomRef.current, {
+				extensions: ['Autodesk.DocumentBrowser'],
+			});
 			// const viewer = new Autodesk.Viewing.Viewer3D(viewerDomRef.current); //headless view
 
 			viewerRef.current = viewer;
@@ -75,7 +91,7 @@ const Viewer = (props) => {
 			});
 
 			// since ghosting is heavy, turn off
-			viewer?.prefs?.set('ghosting', false);
+			// viewer?.prefs?.set('ghosting', false);
 		};
 
 		const onDocumentLoadFailure = () => {
@@ -87,20 +103,42 @@ const Viewer = (props) => {
 		}
 	};
 
-	useEffect(() => {
-		if (urn) {
-			initializeViewer();
-		}
+	// useEffect(() => {
+	// 	if (urn) {
+	// 		initializeViewer();
+	// 	}
 
-		return function cleanUp() {
-			if (viewerRef.current) {
-				viewerRef.current.finish();
-			}
-		};
-	}, [accessToken, urn]);
-
+	// 	if (viewerRef.current) {
+	// 		viewerRef.current.finish();
+	// 		// Autodesk.Viewing.shutdown();
+	// 	}
+	// }, [accessToken]);
+	/// END VIEWER
 	return (
 		<>
+			<Box sx={{ flexGrow: 1 }}>
+				<AppBar position="static" elevation={0}>
+					<Toolbar variant="dense">
+						<IconButton edge="start" color="inherit" aria-label="menu" sx={{ mr: 2 }}>
+							{/* <Button
+								onClick={() => {
+									setSelectedObject({});
+								}}
+							>
+								Back
+							</Button> */}
+							<ArrowBackIcon
+								onClick={() => {
+									setSelectedObject({});
+								}}
+							/>
+						</IconButton>
+						<Typography variant="h6" color="inherit" component="div">
+							{selectedObject.name}
+						</Typography>
+					</Toolbar>
+				</AppBar>
+			</Box>
 			<div id="viewerContainer" ref={viewerDomRef}></div>
 		</>
 	);

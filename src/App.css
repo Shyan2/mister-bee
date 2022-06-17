@@ -10,6 +10,12 @@ body {
 	position: relative;
 }
 
+#markupsViewerContainer {
+	width: 100%;
+	height: calc(70vh);
+	position: relative;
+}
+
 #modelPropsViewerContainer {
 	width: 100%;
 	height: calc(40vh);

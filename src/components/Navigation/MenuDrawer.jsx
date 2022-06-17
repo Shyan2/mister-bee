@@ -94,11 +94,11 @@ const MenuDrawer = ({ open }) => {
 						<ListItemText>收發文 Insights</ListItemText>
 					</ListItem>
 
-					<ListItem button key={'Issues'} component={Link} to="/issues">
+					<ListItem button key={'Markups'} component={Link} to="/markups">
 						<ListItemIcon>
 							<DesignServicesIcon />
 						</ListItemIcon>
-						<ListItemText>Issues</ListItemText>
+						<ListItemText>Markups</ListItemText>
 					</ListItem>
 				</List>
 			</Box>
