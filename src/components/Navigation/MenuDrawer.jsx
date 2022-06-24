@@ -117,6 +117,12 @@ const MenuDrawer = ({ open }) => {
 						</ListItemIcon>
 						<ListItemText>Knowledge Base</ListItemText>
 					</ListItem>
+					<ListItem button key={'AIoT'} component={Link} to="/aiot">
+						<ListItemIcon>
+							<LibraryBooksIcon />
+						</ListItemIcon>
+						<ListItemText>AIoT</ListItemText>
+					</ListItem>
 				</List>
 			</Box>
 

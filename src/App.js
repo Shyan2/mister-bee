@@ -16,6 +16,7 @@ import ModelProperties from './components/ModelProperties/ModelProperties';
 import NotLoggedIn from './components/Error/NotLoggedIn';
 import SendReceiveDocs from './components/SendReceieveDocs/SendReceieveDocs';
 import Markups from './components/Markups/Markups';
+import AIoT from './components/AIoT/AIoT';
 
 import './App.css';
 const App = () => {
@@ -39,6 +40,7 @@ const App = () => {
 									<Route path="/modelproperties" element={<ModelProperties />} />
 									<Route path="/sendReceiveDocs" element={<SendReceiveDocs />} />
 									<Route path="/markups" element={<Markups />} />
+									<Route path="/aiot" element={<AIoT />} />
 								</>
 							)}
 							<Route path="/" element={<Home />} />
