@@ -7,9 +7,9 @@ import ArrowBackIcon from '@mui/icons-material/ArrowBack';
 
 const SERVER_URL = process.env.REACT_APP_API_ROUTE;
 
-const AV = Autodesk.Viewing;
-
 const MarkupViewer = (props) => {
+	const Autodesk = window.Autodesk;
+	const AV = Autodesk.Viewing;
 	const { selectedObject, setSelectedObject } = useContext(SelectedObjectContext);
 
 	const urn = selectedObject.urn;

@@ -6,9 +6,9 @@ import ArrowBackIcon from '@mui/icons-material/ArrowBack';
 
 const SERVER_URL = process.env.REACT_APP_API_ROUTE;
 
-const AV = Autodesk.Viewing;
-
 const Viewer = (props) => {
+	const Autodesk = window.Autodesk;
+	const AV = Autodesk.Viewing;
 	const urn = 'dXJuOmFkc2sud2lwcHJvZDpmcy5maWxlOnZmLlg1MmtCNmpqVEptOGJTOHJKSzdEeVE_dmVyc2lvbj0z';
 	const [accessToken, setAccessToken] = useState(null);
 

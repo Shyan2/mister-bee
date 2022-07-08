@@ -12,7 +12,7 @@ export const useData = (projectId, indexId, queryId) => {
 				withCredentials: true,
 			},
 		);
-		// console.log(result.data);
+		console.log(result.data);
 		let returnArrray = [];
 
 		const splitData = result.data.split('\n').slice(0, -1);
@@ -20,9 +20,11 @@ export const useData = (projectId, indexId, queryId) => {
 		// !!! data process here !!!
 		// Think of what data is necessary to display
 		// Decide what props to display.
+		console.log(splitData);
 
 		splitData.forEach((item) => {
 			const parsedItem = JSON.parse(item);
+			console.log(parsedItem);
 			let returnItem = {
 				svf2Id: parsedItem?.svf2Id,
 				databaseId: parsedItem?.databaseId,
@@ -52,6 +54,7 @@ export const useData = (projectId, indexId, queryId) => {
 			// Type: {"key":"p2057c408","category":"識別資料","type":"String","name":"類型名稱","uom":null}
 			// Name: {"key":"p153cb174","category":"__name__","type":"String","name":"name","uom":null}
 			// Material 3: {"key":"p49f731cb","category":"機械","type":"String","name":"材料","uom":null}
+
 			returnArrray.push(returnItem);
 		});
 		setModelProperties(returnArrray);

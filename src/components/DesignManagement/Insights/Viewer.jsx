@@ -1,4 +1,3 @@
-/* global Autodesk */
 import React, { useState, useEffect, useRef, useContext } from 'react';
 import axios from 'axios';
 import { AppBar, Box, IconButton, Toolbar, Typography } from '@mui/material';
@@ -7,9 +6,9 @@ import { ModelPropertiesContext } from '../Context';
 
 const SERVER_URL = process.env.REACT_APP_API_ROUTE;
 
-const AV = Autodesk.Viewing;
-
 const Viewer = (props) => {
+	const Autodesk = window.Autodesk;
+	const AV = Autodesk.Viewing;
 	const { selectedModelProps, setSelectedModelProps } = useContext(ModelPropertiesContext);
 	// console.log(selectedModelProps);
 	// const urn = 'dXJuOmFkc2sud2lwcHJvZDpmcy5maWxlOnZmLlg1MmtCNmpqVEptOGJTOHJKSzdEeVE_dmVyc2lvbj0z';

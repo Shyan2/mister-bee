@@ -7,9 +7,10 @@ import ArrowBackIcon from '@mui/icons-material/ArrowBack';
 
 import CompareDataTable from './CompareDataTable';
 const SERVER_URL = process.env.REACT_APP_API_ROUTE;
-const AV = Autodesk.Viewing;
 
 const Compare2d = (props) => {
+	const Autodesk = window.Autodesk;
+	const AV = Autodesk.Viewing;
 	const { selectedObject, setSelectedObject } = useContext(SelectedObjectContext);
 	const [compareModelUrn, setCompareModelUrn] = useState(null);
 

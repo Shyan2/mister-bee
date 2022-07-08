@@ -3,9 +3,9 @@ import React, { useState, useEffect, useRef } from 'react';
 import axios from 'axios';
 const SERVER_URL = process.env.REACT_APP_API_ROUTE;
 
-const AV = Autodesk.Viewing;
-
 const Viewer = (props) => {
+	const Autodesk = window.Autodesk;
+	const AV = Autodesk.Viewing;
 	const [urn, setUrn] = useState('dXJuOmFkc2sud2lwcHJvZDpmcy5maWxlOnZmLmtwSlBBZWxjUXFHMU1SUjVBeC1WNmc_dmVyc2lvbj01');
 	//   const { urn } = useContext(UrnContext);
 	const [accessToken, setAccessToken] = useState(null);
