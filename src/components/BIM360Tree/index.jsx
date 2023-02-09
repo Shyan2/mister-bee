@@ -7,6 +7,20 @@ import { SelectedItemContext } from './Context';
 import { ViewingItemContext } from './Context';
 import Viewer from './Viewer';
 
+import GlobalStyles from '@mui/material/GlobalStyles';
+
+const inputGlobalStyles = (
+	<GlobalStyles
+		styles={{
+			'*': {
+				boxSizing: 'border-box',
+				margin: 0,
+				padding: 0,
+			},
+		}}
+	/>
+);
+
 const BIM360Root = () => {
 	const { user } = useContext(UserContext);
 
@@ -20,6 +34,7 @@ const BIM360Root = () => {
 	return (
 		<SelectedItemContext.Provider value={selectedItemValue}>
 			<ViewingItemContext.Provider value={viewingItemValue}>
+				{inputGlobalStyles}
 				{viewingItem.id && <Viewer />}
 				<Box
 					style={{
@@ -29,7 +44,7 @@ const BIM360Root = () => {
 					<Container disableGutters sx={{ p: 2, m: 0 }} maxWidth={false}>
 						<Grid container spacing={2}>
 							<Grid item xs={4}>
-								<Box sx={{ overflow: 'auto', maxHeight: '90vh' }}>
+								<Box sx={{ overflow: 'auto', maxHeight: '90vh', flexGrow: 1 }}>
 									{user.firstName ? (
 										<BIM360Tree id={'#'} name={user.firstName + ' ' + user.lastName} />
 									) : (

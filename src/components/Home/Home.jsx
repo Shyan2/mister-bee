@@ -103,18 +103,19 @@ const Home = () => {
 	}, []);
 
 	return (
-		<SelectedProjectContext.Provider value={selectedProjectValue}>
-			<SelectedFolderContext.Provider value={selectedFolderValue}>
-				<Box display="flex" sx={{ border: 1, margin: 2 }} style={{ height: '80vh' }}>
-					<Grid container spacing={2}>
-						<Grid item xs={12}>
-							<TitleBar selectedProject={selectedProject} setSelectedProject={setSelectedProject} />
-							<Tabs />
-						</Grid>
-					</Grid>
-				</Box>
-			</SelectedFolderContext.Provider>
-		</SelectedProjectContext.Provider>
+		// <SelectedProjectContext.Provider value={selectedProjectValue}>
+		// 	<SelectedFolderContext.Provider value={selectedFolderValue}>
+		// 		<Box display="flex" sx={{ border: 1, margin: 2 }} style={{ height: '80vh' }}>
+		// 			<Grid container spacing={2}>
+		// 				<Grid item xs={12}>
+		// 					<TitleBar selectedProject={selectedProject} setSelectedProject={setSelectedProject} />
+		// 					<Tabs />
+		// 				</Grid>
+		// 			</Grid>
+		// 		</Box>
+		// 	</SelectedFolderContext.Provider>
+		// </SelectedProjectContext.Provider>
+		<h1>Home</h1>
 	);
 };
 

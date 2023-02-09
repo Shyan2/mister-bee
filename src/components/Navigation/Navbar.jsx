@@ -31,7 +31,7 @@ const Navbar = () => {
 				const result = await axios.get(`${SERVER_URL}/api/forge/user/profile`, {
 					withCredentials: true,
 				});
-				// console.log(result.data);
+				console.log(result.data);
 				setUser(result.data);
 				return result.data;
 			} catch (err) {
@@ -84,12 +84,12 @@ const Navbar = () => {
 	return (
 		<Box sx={{ flexGrow: 1 }}>
 			<AppBar
-				className={classes.appBar}
+				// className={classes.appBar}
 				position="fixed"
 				sx={{ zIndex: (theme) => theme.zIndex.drawer + 1, background: '#f53528' }}
 			>
 				{/* why does minHeight in classes not work on toolbar?? */}
-				<Toolbar className={classes.toolbar} style={{ minHeight: 48 }}>
+				<Toolbar style={{ minHeight: 48 }}>
 					{/* <IconButton color="inherit" aria-label="open drawer" onClick={switchDrawer} edge="start">
 						<MenuIcon />
 					</IconButton> */}

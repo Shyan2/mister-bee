@@ -38,9 +38,13 @@ const ListMarkups = ({ selectedObject }) => {
 	const loadMarkup = async () => {
 		// console.log(markup);
 		console.log(selectedObject);
+		// await markup.enterEditMode();
 		await markup.show();
+		// await markup.viewer.restoreState(selectedObject.viewerState, null, true);
 		await markup.viewer.restoreState(selectedObject.viewerState, null, true);
 		await markup.loadMarkups(selectedObject.svgString, 'layer 1');
+
+		// await markup.loadMarkups(selectedObject.svgString);
 	};
 
 	const resetView = async () => {

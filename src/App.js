@@ -25,7 +25,7 @@ const App = () => {
 
 	return (
 		<ThemeProvider theme={theme}>
-			<GlobalStyles />
+
 			<Box sx={{ pt: '48px', pl: '64px' }}>
 				<BrowserRouter>
 					<UserContext.Provider value={userValue}>
